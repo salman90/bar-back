@@ -41,7 +41,7 @@ class CoctailList extends Component {
       hideBack
       showOnLoad/>
       <ScrollView style={{paddingTop:70}}>
-      {this.state.results.length >= 1 ?
+      {this.state.results.length !== 0 ?
         this.state.results.map((result, i) => {
           return (
             <TouchableHighlight
