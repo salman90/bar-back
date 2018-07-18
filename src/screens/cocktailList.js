@@ -6,16 +6,25 @@ import  {
   TouchableHighlight,
 } from 'react-native';
 import * as firebase from 'firebase';
-// import Search from 'react-native-searchbar';
+import SearchBar from 'react-native-searchbar';
 import fontAwesome from 'react-native-vector-icons';
-// import { createBottomTabNavigator } from 'react-navigation';
-
 
 class CoctailList extends Component {
-  state = {
-    cocktailNames: []
+  constructor(props){
+    super(props);
+    this.state = {
+      cocktailNames: [],
+      results: [],
+    };
+    this._handleResults = this._handleResults.bind(this);
   }
   componentWillMount(){
+    this.Lister()
+  }
+  _handleResults(results){
+    this.setState({ results });
+  }
+  Lister(){
     firebase.database().ref('/cocktail_list').on('value', (snapshot) =>{
       const cocktailList = snapshot.val()
       this.setState({ cocktailNames: Object.keys(cocktailList) })
@@ -24,27 +33,43 @@ class CoctailList extends Component {
   render(){
     return(
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
-        <ScrollView style={{paddingTop:70}}>
-        {this.state.cocktailNames.length !== 0 ?
-      this.state.cocktailNames.map((name, i) => {
-        return (
-          <TouchableHighlight
-           key={i}
-          >
+      <SearchBar
+      ref={(ref) => this.searchBar = ref}
+      data={this.state.cocktailNames}
+      handleResults={this._handleResults}
+      allDataOnEmptySearch
+      hideBack
+      showOnLoad/>
+      <ScrollView style={{paddingTop:70}}>
+      {this.state.results.length !== 0 ?
+        this.state.results.map((result, i) => {
+          return (
+            <TouchableHighlight
+            style={{paddingTop: 5}}
+            key={i}>
             <Text key={i}>
-             {name}
+            {result}
             </Text>
-          </TouchableHighlight>
+            </TouchableHighlight>
 
           );
-         })
-          :
-        <Text>No cocktails</Text>
-        }
-    </ScrollView>
-  </View>
+        })
+        :
+        this.state.cocktailNames.map((name, i) => {
+          return (
+            <TouchableHighlight
+            style={{paddingTop: 5}}
+            key={i}>
+            <Text key={i}>
+            {name}
+            </Text>
+            </TouchableHighlight>
+          );
+        })
+      }
+      </ScrollView>
+      </View>
     );
   }
 }
-
 export default CoctailList;
