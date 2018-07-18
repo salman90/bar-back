@@ -11,6 +11,7 @@ class Auth extends Component {
     firebase.auth().onAuthStateChanged(userAuth => {
       if(userAuth){
         // this.setState({ loggedIn: true})
+        // console.log(userAuth)
         this.props.navigation.navigate('cocktailList')
       }
     })
@@ -39,8 +40,10 @@ class Auth extends Component {
     })
      .catch(() => {
        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(() => {
+        .then((user) => {
+          // console.log(user.uid, 'in create user function')
           this.setState({error: '' ,loading: false})
+          this.createUserInDatabase(email, password)
           this.props.navigation.navigate('cocktailList')
         })
         .catch((error) => {
@@ -54,6 +57,25 @@ class Auth extends Component {
               }
         })
      })
+  }
+
+  createUserInDatabase = (email, password) => {
+    const defaults = {
+      firstName: '',
+      lastName: '',
+      age: '',
+      gender: '',
+      profileImage: '',
+      email: email,
+    }
+    const user = firebase.auth().currentUser;
+    // console.log(user)
+    // console.log(user.uid, 'in firebase database function')
+    const userUid = user.uid
+     // firebase.auth().currentUser
+    firebase.database().ref('users').child(userUid).update({
+      ...defaults
+    })
   }
 
   render(){
