@@ -3,11 +3,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import CoctailList from './screens/cocktailList';
 import UserCocktail from './screens/userCockatil';
 import Profile from './screens/profile';
-import Auth from './screens/auth'
-import { createBottomTabNavigator } from 'react-navigation';
+import Auth from './screens/auth';
+import CocktailDetail from './screens/cocktailDetail';
+import {
+  createBottomTabNavigator,
+  createStackNavigator,
+ } from 'react-navigation';
 import * as firebase from "firebase";
-
-
 
 class App extends React.Component {
 
@@ -21,7 +23,6 @@ class App extends React.Component {
       messagingSenderId: "133444454362"
     };
     firebase.initializeApp(config);
-
   }
 
   render() {
@@ -29,13 +30,20 @@ class App extends React.Component {
       auth: {screen: Auth },
       main: {
         screen: createBottomTabNavigator({
-          cocktailList: {screen: CoctailList},
-          profile: {screen: Profile},
-          usercocktail: {screen: UserCocktail }
+          cocktailList:   {
+
+            screen: createStackNavigator({
+              cocktailList: {screen: CoctailList },
+              cocktailDetail: { screen: CocktailDetail},
+            })
+          },
+          profile:        { screen: Profile },
+          usercocktail:   { screen: UserCocktail }
         })
       }
 
-    },{
+    },
+    {
       navigationOptions: {
           tabBarVisible: false
       },
