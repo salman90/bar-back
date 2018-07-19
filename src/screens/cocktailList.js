@@ -8,6 +8,7 @@ import  {
 import * as firebase from 'firebase';
 import SearchBar from 'react-native-searchbar';
 import fontAwesome from 'react-native-vector-icons';
+import { createStackNavigator } from 'react-navigation';
 
 class CoctailList extends Component {
   constructor(props){
@@ -31,6 +32,7 @@ class CoctailList extends Component {
     });
   }
   render(){
+    const { navigate } = this.props.navigation;
     return(
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
       <SearchBar
@@ -43,24 +45,30 @@ class CoctailList extends Component {
       <ScrollView style={{paddingTop:70}}>
       {this.state.results.length !== 0 ?
         this.state.results.map((result, i) => {
+          console.log(i)
           return (
             <TouchableHighlight
+            key={i}
             style={{paddingTop: 5}}
-            key={i}>
-            <Text key={i}>
+            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
+              cocktail: result});
+            }}>
+            <Text>
             {result}
             </Text>
             </TouchableHighlight>
-
           );
         })
         :
         this.state.cocktailNames.map((name, i) => {
           return (
             <TouchableHighlight
+            key={i}
             style={{paddingTop: 5}}
-            key={i}>
-            <Text key={i}>
+            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
+              cocktail: name});
+            }}>
+            <Text>
             {name}
             </Text>
             </TouchableHighlight>
