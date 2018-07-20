@@ -3,12 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import CoctailList from './screens/cocktailList';
 import UserCocktail from './screens/userCockatil';
 import Profile from './screens/profile';
+import CockatailForm from './screens/cockatailForm';
 import Auth from './screens/auth';
 import CocktailDetail from './screens/cocktailDetail';
 import {
   createBottomTabNavigator,
   createStackNavigator,
  } from 'react-navigation';
+
 import * as firebase from "firebase";
 
 class App extends React.Component {
@@ -30,6 +32,13 @@ class App extends React.Component {
       auth: {screen: Auth },
       main: {
         screen: createBottomTabNavigator({
+          profile: {screen: Profile },
+          userCockatil:{
+            screen: createStackNavigator({
+              usercocktail: {screen: UserCocktail },
+              cockatailForm: {screen: CockatailForm}
+            })
+          },
           cocktailList:   {
 
             screen: createStackNavigator({
@@ -37,8 +46,7 @@ class App extends React.Component {
               cocktailDetail: { screen: CocktailDetail},
             })
           },
-          profile:        { screen: Profile },
-          usercocktail:   { screen: UserCocktail }
+          usercocktail:   { screen UserCocktail }
         })
       }
 
