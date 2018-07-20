@@ -9,6 +9,7 @@ import * as firebase from 'firebase';
 import SearchBar from 'react-native-searchbar';
 import fontAwesome from 'react-native-vector-icons';
 import { createStackNavigator } from 'react-navigation';
+import { Button } from 'react-native-elements'
 
 class UserCocktail extends Component {
   constructor(props){
@@ -35,8 +36,12 @@ class UserCocktail extends Component {
       }
     });
   }
+
+  renderForm() {
+    this.props.navigation.navigate('cockatailForm')
+  }
+
   render(){
-    console.log(this.state.cocktailNames);
     const { navigate } = this.props.navigation;
     return(
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
@@ -48,9 +53,12 @@ class UserCocktail extends Component {
       hideBack
       showOnLoad/>
       <ScrollView style={{paddingTop:70}}>
+      <Button
+        title= 'create cocktail'
+        onPress={this.renderForm.bind(this)}
+      />
       {this.state.results.length !== 0 ?
         this.state.results.map((result, i) => {
-          console.log(i)
           return (
             <TouchableHighlight
             key={i}
