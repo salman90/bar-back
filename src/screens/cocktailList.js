@@ -30,9 +30,13 @@ class CoctailList extends Component {
       this.setState({ cocktailNames: Object.keys(cocktailList) })
     });
   }
+  renderDetail(){
+    console.log('hello')
+  }
   render(){
     return(
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
+
       <SearchBar
       ref={(ref) => this.searchBar = ref}
       data={this.state.cocktailNames}
@@ -42,7 +46,8 @@ class CoctailList extends Component {
       showOnLoad/>
       <ScrollView style={{paddingTop:70}}>
       {this.state.results.length !== 0 ?
-        this.state.results.map((result, i) => {
+       this.state.results.map((result, i) => {
+          console.log(i)
           return (
             <TouchableHighlight
             style={{paddingTop: 5}}
@@ -59,7 +64,9 @@ class CoctailList extends Component {
           return (
             <TouchableHighlight
             style={{paddingTop: 5}}
-            key={i}>
+            key={i}
+            onPress={this.renderDetail.bind(this)}
+            >
             <Text key={i}>
             {name}
             </Text>
