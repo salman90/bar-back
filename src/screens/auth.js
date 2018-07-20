@@ -65,8 +65,9 @@ class Auth extends Component {
       lastName: '',
       age: '',
       gender: '',
-      profileImage: '',
+      profileImage:'https://firebasestorage.googleapis.com/v0/b/bar-back-c3947.appspot.com/o/images%2Fdefault.jpg?alt=media&token=1bddeb53-562a-41ff-a201-909930c27b31',
       email: email,
+
     }
     const user = firebase.auth().currentUser;
     // console.log(user)

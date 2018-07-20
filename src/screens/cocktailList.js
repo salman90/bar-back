@@ -31,10 +31,14 @@ class CoctailList extends Component {
       this.setState({ cocktailNames: Object.keys(cocktailList) })
     });
   }
+  renderDetail(){
+    console.log('hello')
+  }
   render(){
     const { navigate } = this.props.navigation;
     return(
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
+
       <SearchBar
       ref={(ref) => this.searchBar = ref}
       data={this.state.cocktailNames}
@@ -44,6 +48,7 @@ class CoctailList extends Component {
       showOnLoad/>
       <ScrollView style={{paddingTop:70}}>
       {this.state.results.length !== 0 ?
+
         this.state.results.map((result, i) => {
           console.log(i)
           return (
