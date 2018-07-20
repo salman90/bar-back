@@ -6,10 +6,12 @@ import  {
   TextInput,
   Dimensions,
   Picker,
-  ActivityIndicator} from 'react-native';
+  ActivityIndicator,
+  Modal,
+TouchableWithoutFeedback} from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 import firebase from 'firebase';
-import { Avatar } from 'react-native-elements';
+import { Avatar, Button, Icon } from 'react-native-elements';
 // import { createBottomTabNavigator } from 'react-navigation';
 
 const {height, width} = Dimensions.get('window');
@@ -17,30 +19,38 @@ const {height, width} = Dimensions.get('window');
 
 class Profile extends Component {
   state = {
-    user: null
+    user: null,
+    isVisible: false,
+    title: '',
+    description: '',
   }
 
   componentWillMount() {
-    const user = firebase.auth().currentUser;
-    const userUid = user.uid
+    const userInfo = firebase.auth().currentUser;
+    const userUid = userInfo.uid
+
+    this.setState({ userInfo: userInfo })
+     // console.log(this.state.user)
     firebase.database().ref('users').child(userUid).on('value', snapshot => {
-      const userInfo =  snapshot.val()
-      this.setState({ user: userInfo })
+      const user =  snapshot.val()
+      this.setState({ user: user })
     })
   }
 
   onFirstNameChange = (text) =>  {
-    // console.log(text)
-    const user = firebase.auth().currentUser
-    const userUid = user.uid
+    const { userInfo } = this.state
+    const userUid = userInfo.uid
+
+    // const userUid = user.uid
     firebase.database().ref('users').child(userUid).update({
       firstName: text
     })
   }
 
   onLastNameChange = (text) => {
-    const user = firebase.auth().currentUser
-    const userUid = user.uid
+    const { userInfo } = this.state
+    const userUid = userInfo.uid
+
     firebase.database().ref('users').child(userUid).update({
       lastName: text
     })
@@ -54,8 +64,8 @@ class Profile extends Component {
   };
 
   uploadImage = async () => {
-    const user = firebase.auth().currentUser
-    const userUid = user.uid
+    const { userInfo } = this.state
+    const userUid = userInfo.uid
 
     await this.askPermissionsAsync();
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -65,8 +75,8 @@ class Profile extends Component {
     // console.log(result)
     if(!result.cancelled) {
       let localUri = result.uri
-      let filename = localUri.split('/').pop();
-      let match = /\.(\w+)$/.exec(result.uri.split('/').pop());
+      // let filename = localUri.split('/').pop();
+      // let match = /\.(\w+)$/.exec(result.uri.split('/').pop());
       // let type = match ? `image/${match[1]}` : `image`;
       let image =  await this.UploadImageToStorage(localUri, userUid)
       firebase.database().ref('users').child(userUid).update({ profileImage: image })
@@ -92,8 +102,115 @@ class Profile extends Component {
        return downloadUrl
   }
 
+  _onFormButtonPress(){
+    this.props.navigation.navigate('cockatailForm')
+  }
+
+  onCloseModalPress(){
+    this.setState({ isVisible: false })
+  }
+
+
+  uploadCoctailImage(){
+    console.log('Upload Coctail Image you bitch')
+  }
+
+  createCocktail(){
+    // const {user, title, description, } =  this.state
+    // firebase.database().ref('cocktail_list').push({
+    //   name: title,
+    //   description: description,
+    //   user: user
+    // })
+  }
+
+  renderFormModal(){
+    return (
+      <Modal
+      visible={this.state.isVisible}
+      transparent={true}
+      >
+      <TouchableWithoutFeedback
+        onPress={this.onCloseModalPress.bind(this)}
+      >
+       <View
+         style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}
+       >
+        <View
+         style={{ width: width * 0.90, height: height * 0.5, backgroundColor: 'red',
+         borderRadius: 5 }}
+        >
+          <View
+           style={{alignItems: 'center', justifyContent: 'center', marginTop: 20}}
+          >
+             <Text>Cocktail Title</Text>
+          </View>
+          <View>
+             <TextInput
+              autoCapitalize='none'
+              autoCorrect={false}
+               style={{ width: '90%', height: 50, borderWidth: 2, marginLeft: 14,
+               borderColor: 'gray', marginTop: 8, borderRadius: 8  }}
+               onChangeText={(text) => this.setState({ title: text})}
+               value={this.state.title}
+             />
+          </View>
+          <View
+            style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10}}
+          >
+             <Text>Ingredients</Text>
+          </View>
+          <View>
+          <TextInput
+            multiline={true}
+            autoCapitalize='none'
+            autoCorrect={false}
+            style={{ width: '90%', height: 70, borderWidth: 2, marginLeft: 14,
+            borderColor: 'gray', marginTop: 8, marginBottom: 10, borderRadius: 8 }}
+            onChangeText={(text) => this.setState({ description: text}) }
+            value={this.state.description}
+          />
+          </View>
+          <View
+           style={{alignItems: 'center', justifyContent: 'center'}}
+          >
+          <TouchableWithoutFeedback
+           onPress={this.uploadCoctailImage.bind(this)}
+          >
+            <View
+             style={{width: '50%', height: 50, backgroundColor: 'gray', flexDirection:'row', alignItems: 'center', justifyContent: 'center', marginTop: 10}}
+            >
+             <Text>Upload Image</Text>
+             <Icon
+             name='upload'
+             size={20}
+             type='font-awesome'
+             containerStyle={{marginLeft: 8}}
+             />
+            </View>
+
+          </TouchableWithoutFeedback>
+          <View
+           style={{ marginTop: 10}}
+          >
+            <Button
+              title='Submit Cocktail'
+              onPress={this.createCocktail.bind(this)}
+            />
+          </View>
+          </View>
+        </View>
+      </View>
+       </TouchableWithoutFeedback>
+    </Modal>
+    )
+  }
+
 
   render(){
+    const {user, userInfo} = this.state
+    console.log(user, 'this is user')
+    console.log(userInfo, 'this is userInfo')
     if(!this.state.user) {
       return <Text>Loading</Text>
     }
@@ -114,7 +231,7 @@ class Profile extends Component {
              width={200}
               size="xlarge"
               onPress={this.uploadImage}
-              source={{uri:this.state.user.profileImage}}
+              source={{uri: this.state.user.profileImage}}
              />
            </View>
            <View
@@ -144,10 +261,14 @@ class Profile extends Component {
           <View
            style={{ flexDirection: 'column', marginBottom: 10}}
           >
-
+             <Button
+               title='Create Your Cocktail'
+               onPress={this._onFormButtonPress.bind(this)}
+             />
           </View>
         </View>
        </ScrollView>
+       {this.renderFormModal()}
     </View>
     )
   }
