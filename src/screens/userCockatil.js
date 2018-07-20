@@ -29,9 +29,9 @@ class UserCocktail extends Component {
   Lister(){
     firebase.database().ref('/user_cocktails/'+`${this.state.user.uid}`).on('value', (snapshot) =>{
       if(snapshot.val() !== null){
-        this.setState({cocktailnames: Object.keys(snapshot.val())});
+        this.setState({cocktailNames: Object.keys(snapshot.val()) })
       } else {
-        this.setState({cocktailnames: ["Add Cocktails!"]});
+        this.setState({cocktailNames: ["Add Cocktails!"]});
       }
     });
   }
