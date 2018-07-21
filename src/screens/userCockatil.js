@@ -41,6 +41,10 @@ class UserCocktail extends Component {
     this.props.navigation.navigate('cockatailForm')
   }
 
+  renderInput(){
+    this.props.navigation.navigate('inputScreen')
+  }
+
   render(){
     const { navigate } = this.props.navigation;
     return(
@@ -57,6 +61,7 @@ class UserCocktail extends Component {
         title= 'create cocktail'
         onPress={this.renderForm.bind(this)}
       />
+
       {this.state.results.length !== 0 ?
         this.state.results.map((result, i) => {
           return (

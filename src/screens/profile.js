@@ -209,8 +209,6 @@ class Profile extends Component {
 
   render(){
     const {user, userInfo} = this.state
-    console.log(user, 'this is user')
-    console.log(userInfo, 'this is userInfo')
     if(!this.state.user) {
       return <Text>Loading</Text>
     }
