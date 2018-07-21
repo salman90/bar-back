@@ -4,19 +4,21 @@ import  {
   Text,
   Button,
   ScrollView,
+  Image,
   TouchableHighlight,
 } from 'react-native';
 import * as firebase from 'firebase';
 
-class CocktailDetail extends Component {
+class UserCocktailDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cocktail: {}
+      cocktail: {},
+      user: firebase.auth().currentUser
     };
   }
   componentWillMount(){
-    firebase.database().ref('/cocktail_list/' + `${this.props.navigation.state.params.cocktail}`).on('value', (snapshot) =>{
+    firebase.database().ref('/user_cocktails/'+`${this.state.user.uid}/`+ `${this.props.navigation.state.params.cocktail}`).on('value', (snapshot) =>{
       this.setState({cocktail: snapshot.val()});
     });
   }
@@ -27,6 +29,9 @@ class CocktailDetail extends Component {
     }
     return (
       <View style={{paddingTop: 50}}>
+        <Image
+          style={{width: 200, height: 200}}
+          source={{uri: this.state.cocktail.image }} />
         <Text>Details on {this.state.cocktail.name}</Text>
         <Text>Ingredients: {this.state.cocktail.ingredients}</Text>
         <Text>Steps: {this.state.cocktail.steps}</Text>
@@ -35,4 +40,4 @@ class CocktailDetail extends Component {
   }
 }
 
-export default CocktailDetail;
+export default UserCocktailDetail;
