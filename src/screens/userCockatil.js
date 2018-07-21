@@ -63,7 +63,7 @@ class UserCocktail extends Component {
             <TouchableHighlight
             key={i}
             style={{paddingTop: 5}}
-            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
+            onPress={() => {this.props.navigation.navigate('userCocktailDetail', {
               cocktail: result});
             }}>
             <Text>
@@ -78,7 +78,7 @@ class UserCocktail extends Component {
             <TouchableHighlight
             key={i}
             style={{paddingTop: 5}}
-            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
+            onPress={() => {this.props.navigation.navigate('userCocktailDetail', {
               cocktail: name});
             }}>
             <Text>
