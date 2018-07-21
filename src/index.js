@@ -6,6 +6,7 @@ import Profile from './screens/profile';
 import CockatailForm from './screens/cockatailForm';
 import Auth from './screens/auth';
 import CocktailDetail from './screens/cocktailDetail';
+import UserCocktailDetail from './screens/userCocktailDetail';
 import {
   createBottomTabNavigator,
   createStackNavigator,
@@ -36,7 +37,8 @@ class App extends React.Component {
           userCockatil:{
             screen: createStackNavigator({
               usercocktail: {screen: UserCocktail },
-              cockatailForm: {screen: CockatailForm}
+              cockatailForm: {screen: CockatailForm},
+              userCocktailDetail: { screen: UserCocktailDetail }
             })
           },
           cocktailList:   {
