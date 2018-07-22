@@ -3,13 +3,19 @@ import  {
   View,
   Text,
   ScrollView,
-  TouchableHighlight, } from 'react-native';
-// import { createBottomTabNavigator } from 'react-navigation';
+  TouchableHighlight,
+  FlatList,
+  Image,
+  Dimensions,
+} from 'react-native';
 import * as firebase from 'firebase';
 import SearchBar from 'react-native-searchbar';
 import fontAwesome from 'react-native-vector-icons';
 import { createStackNavigator } from 'react-navigation';
-import { Button } from 'react-native-elements'
+import { Card, Button } from 'react-native-elements';
+
+const {height, width} = Dimensions.get('window');
+
 
 class UserCocktail extends Component {
   constructor(props){
@@ -17,6 +23,7 @@ class UserCocktail extends Component {
     this.state = {
       cocktailNames: [],
       results: [],
+      cocktailList: [],
       user: firebase.auth().currentUser
     };
     this._handleResults = this._handleResults.bind(this);
@@ -30,67 +37,70 @@ class UserCocktail extends Component {
   Lister(){
     firebase.database().ref('/user_cocktails/'+`${this.state.user.uid}`).on('value', (snapshot) =>{
       if(snapshot.val() !== null){
-        this.setState({cocktailNames: Object.keys(snapshot.val()) })
+        const data = snapshot.val()
+        let cocktailList = Object.values(data);
+        this.setState({ cocktailList })
       } else {
-        this.setState({cocktailNames: ["Add Cocktails!"]});
+        this.setState({cocktailList: ["Add Cocktails!"]});
       }
     });
   }
 
-  renderForm() {
-    this.props.navigation.navigate('cockatailForm')
+   showCocktailDetail(item){
+     console.log(item)
+     // this.props.navigation.navigate('cocktailDetail', {cocktail: item})
+   }
+
+_keyExtractor = item => (item.index || item.image)
+
+renderCocktail(item){
+  // console.log(item)
+    this.props.navigation.navigate('renderCocktail', {cocktail: item } )
   }
 
-  renderInput(){
-    this.props.navigation.navigate('inputScreen')
+  _renderItem({item, index}) {
+    return (
+       <Card
+        containerStyle={{ borderRadius: 10 }}
+        title={item.name}
+        key={index}
+        titleStyle={{ fontWeight: 'bold',
+              letterSpacing: 2,
+            }}
+       >
+         <View
+          style={{ height: 200, alignItems: 'center', justifyContent: 'center' }}
+         >
+          <Image
+          source={{uri: item.image}}
+          style={{ width: 300, height: 200, borderRadius: 10 }}
+          />
+         </View>
+         <View
+          style={{ marginTop: 10}}
+         >
+           <Button
+              title='View Details'
+              onPress={this.renderCocktail.bind(this, item)}
+              buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+           />
+         </View>
+       </Card>
+    )
   }
 
   render(){
+    // console.log(this.state.cocktailList)
     const { navigate } = this.props.navigation;
     return(
-      <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
-
-      <ScrollView style={{paddingTop:70}}>
-      <Button
-        style={{paddingTop: 70 }}
-        title= 'create cocktail'
-        onPress={this.renderForm.bind(this)} />
-      <ScrollView>
-      {this.state.results.length !== 0 ?
-        this.state.results.map((result, i) => {
-          return (
-            <TouchableHighlight
-            key={i}
-            style={{paddingTop: 5}}
-            onPress={() => {this.props.navigation.navigate('userCocktailDetail', {
-              cocktail: result});
-            }}>
-            <Text>
-            {result}
-            </Text>
-            </TouchableHighlight>
-          );
-        })
-        :
-        this.state.cocktailNames.map((cocktail, i) => {
-          return (
-            <TouchableHighlight
-            key={i}
-            style={{paddingTop: 5}}
-            onPress={() => {this.props.navigation.navigate('userCocktailDetail', {
-              cocktail: cocktail});
-            }}>
-            <Text>
-            {cocktail}
-            </Text>
-            </TouchableHighlight>
-          );
-        })
-      }
-      </ScrollView>
+      <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'gray'}}>
+         <FlatList
+            data={this.state.cocktailList}
+            renderItem={this._renderItem.bind(this)}
+            keyExtractor={this._keyExtractor}
+         />
       </View>
     );
   }
 }
-
 export default UserCocktail;
