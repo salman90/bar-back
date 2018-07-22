@@ -12,6 +12,7 @@ import { createStackNavigator } from 'react-navigation';
 import { Button } from 'react-native-elements'
 
 class UserCocktail extends Component {
+
   constructor(props){
     super(props);
     this.state = {
@@ -21,6 +22,9 @@ class UserCocktail extends Component {
     };
     this._handleResults = this._handleResults.bind(this);
   }
+
+
+
   componentWillMount(){
     this.Lister()
   }
@@ -30,9 +34,9 @@ class UserCocktail extends Component {
   Lister(){
     firebase.database().ref('/user_cocktails/'+`${this.state.user.uid}`).on('value', (snapshot) =>{
       if(snapshot.val() !== null){
-        this.setState({cocktailNames: Object.keys(snapshot.val()) })
+        this.setState({cocktailnames: Object.keys(snapshot.val())});
       } else {
-        this.setState({cocktailNames: ["Add Cocktails!"]});
+        this.setState({cocktailnames: ["Add Cocktails!"]});
       }
     });
   }
@@ -49,20 +53,26 @@ class UserCocktail extends Component {
     const { navigate } = this.props.navigation;
     return(
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
-
+      <SearchBar
+      ref={(ref) => this.searchBar = ref}
+      data={this.state.cocktailNames}
+      handleResults={this._handleResults}
+      allDataOnEmptySearch
+      hideBack
+      showOnLoad/>
       <ScrollView style={{paddingTop:70}}>
       <Button
-        style={{paddingTop: 70 }}
         title= 'create cocktail'
-        onPress={this.renderForm.bind(this)} />
-      <ScrollView>
+        onPress={this.renderForm.bind(this)}
+      />
+
       {this.state.results.length !== 0 ?
         this.state.results.map((result, i) => {
           return (
             <TouchableHighlight
             key={i}
             style={{paddingTop: 5}}
-            onPress={() => {this.props.navigation.navigate('userCocktailDetail', {
+            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
               cocktail: result});
             }}>
             <Text>
@@ -72,16 +82,16 @@ class UserCocktail extends Component {
           );
         })
         :
-        this.state.cocktailNames.map((cocktail, i) => {
+        this.state.cocktailNames.map((name, i) => {
           return (
             <TouchableHighlight
             key={i}
             style={{paddingTop: 5}}
-            onPress={() => {this.props.navigation.navigate('userCocktailDetail', {
+            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
               cocktail: name});
             }}>
             <Text>
-            {cocktail}
+            {name}
             </Text>
             </TouchableHighlight>
           );

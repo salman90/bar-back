@@ -36,7 +36,7 @@ class App extends React.Component {
           profile: {screen: Profile },
           userCockatil:{
             screen: createStackNavigator({
-              usercocktail: {screen: UserCocktail },
+              usercocktail: {screen: UserCocktail},
               cockatailForm: {screen: CockatailForm},
               userCocktailDetail: { screen: UserCocktailDetail }
             })
@@ -47,11 +47,20 @@ class App extends React.Component {
               renderCocktail: { screen: CocktailDetail},
             })
           },
+        }, {
+          tabBarOptions: {
+            showLabel: true,
+			      showIcon: true,
+            activeTintColor: '#d074dc',
+            inactiveTintColor: '#fff',
+          },
         })
       }
 
     },
     {
+      lazy: true,
+      swipeEnabled: false,
       navigationOptions: {
           tabBarVisible: false
       },
