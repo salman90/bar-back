@@ -18,6 +18,7 @@ const {height, width} = Dimensions.get('window');
 
 
 class UserCocktail extends Component {
+
   constructor(props){
     super(props);
     this.state = {
@@ -28,6 +29,9 @@ class UserCocktail extends Component {
     };
     this._handleResults = this._handleResults.bind(this);
   }
+
+
+
   componentWillMount(){
     this.Lister()
   }
@@ -37,11 +41,9 @@ class UserCocktail extends Component {
   Lister(){
     firebase.database().ref('/user_cocktails/'+`${this.state.user.uid}`).on('value', (snapshot) =>{
       if(snapshot.val() !== null){
-        const data = snapshot.val()
-        let cocktailList = Object.values(data);
-        this.setState({ cocktailList })
+        this.setState({cocktailnames: Object.keys(snapshot.val())});
       } else {
-        this.setState({cocktailList: ["Add Cocktails!"]});
+        this.setState({cocktailnames: ["Add Cocktails!"]});
       }
     });
   }
@@ -49,10 +51,58 @@ class UserCocktail extends Component {
     console.log(item)
     // this.props.navigation.navigate('cocktailDetail', {cocktail: item})
   }
-  _keyExtractor = item => (item.index || item.image)
-  renderCocktail(item){
-    // console.log(item)
-    this.props.navigation.navigate('renderCocktail', {cocktail: item } )
+
+  render(){
+    const { navigate } = this.props.navigation;
+    return(
+      <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
+      <SearchBar
+      ref={(ref) => this.searchBar = ref}
+      data={this.state.cocktailNames}
+      handleResults={this._handleResults}
+      allDataOnEmptySearch
+      hideBack
+      showOnLoad/>
+      <ScrollView style={{paddingTop:70}}>
+      <Button
+        title= 'create cocktail'
+        onPress={this.renderForm.bind(this)}
+      />
+
+      {this.state.results.length !== 0 ?
+        this.state.results.map((result, i) => {
+          return (
+            <TouchableHighlight
+            key={i}
+            style={{paddingTop: 5}}
+            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
+              cocktail: result});
+            }}>
+            <Text>
+            {result}
+            </Text>
+            </TouchableHighlight>
+          );
+        })
+        :
+        this.state.cocktailNames.map((name, i) => {
+          return (
+            <TouchableHighlight
+            key={i}
+            style={{paddingTop: 5}}
+            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
+              cocktail: name});
+            }}>
+            <Text>
+            {name}
+            </Text>
+            </TouchableHighlight>
+          );
+        })
+      }
+      </ScrollView>
+      </View>
+    );
   }
   _renderItem({item, index}) {
     return (
