@@ -83,7 +83,7 @@ class UserCocktail extends Component {
             key={i}
             style={{paddingTop: 5}}
             onPress={() => {this.props.navigation.navigate('userCocktailDetail', {
-              cocktail: name});
+              cocktail: cocktail});
             }}>
             <Text>
             {cocktail}
