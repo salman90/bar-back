@@ -45,62 +45,80 @@ class UserCocktail extends Component {
       }
     });
   }
-
-   showCocktailDetail(item){
-     console.log(item)
-     // this.props.navigation.navigate('cocktailDetail', {cocktail: item})
-   }
-
-_keyExtractor = item => (item.index || item.image)
-
-renderCocktail(item){
-  // console.log(item)
-    this.props.navigation.navigate('renderCocktail', {cocktail: item } )
+  showCocktailDetail(item){
+    console.log(item)
+    // this.props.navigation.navigate('cocktailDetail', {cocktail: item})
   }
-
-  _renderItem({item, index}) {
-    return (
-       <Card
-        containerStyle={{ borderRadius: 10 }}
-        title={item.name}
-        key={index}
-        titleStyle={{ fontWeight: 'bold',
-              letterSpacing: 2,
-            }}
-       >
-         <View
-          style={{ height: 200, alignItems: 'center', justifyContent: 'center' }}
-         >
-          <Image
-          source={{uri: item.image}}
-          style={{ width: 300, height: 200, borderRadius: 10 }}
-          />
-         </View>
-         <View
-          style={{ marginTop: 10}}
-         >
-           <Button
-              title='View Details'
-              onPress={this.renderCocktail.bind(this, item)}
-              buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
-           />
-         </View>
-       </Card>
-    )
-  }
-
-  render(){
-    // console.log(this.state.cocktailList)
-    const { navigate } = this.props.navigation;
+  searchResults(){
     return(
-      <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'gray'}}>
-         <FlatList
-            data={this.state.cocktailList}
-            renderItem={this._renderItem.bind(this)}
-            keyExtractor={this._keyExtractor}
-         />
-      </View>
+      <FlatList
+      style={{paddingTop: 70}}
+      data={this.state.results}
+      renderItem={this._renderItem.bind(this)}
+      keyExtractor={this._keyExtractor}
+      />
     );
   }
+  noResults(){
+    return(
+      <FlatList
+      style={{paddingTop: 70}}
+      data={this.state.cocktailList}
+      renderItem={this._renderItem.bind(this)}
+      keyExtractor={this._keyExtractor}
+      />
+    );
+  }
+  _keyExtractor = item => (item.index || item.image)
+  renderCocktail(item){
+    // console.log(item)
+    this.props.navigation.navigate('renderCocktail', {cocktail: item } )
+  }
+  _renderItem({item, index}) {
+    return (
+      <Card
+      containerStyle={{ borderRadius: 10 }}
+      title={item.name}
+      key={index}
+      titleStyle={{ fontWeight: 'bold',
+      letterSpacing: 2,
+    }}
+    >
+    <View
+    style={{ height: 200, alignItems: 'center', justifyContent: 'center' }}
+    >
+    <Image
+    source={{uri: item.image}}
+    style={{ width: 300, height: 200, borderRadius: 10 }}
+    />
+    </View>
+    <View
+    style={{ marginTop: 10}}
+    >
+    <Button
+    title='View Details'
+    onPress={this.renderCocktail.bind(this, item)}
+    buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+    />
+    </View>
+    </Card>
+  )
+}
+
+render(){
+  // console.log(this.state.cocktailList)
+  const { navigate } = this.props.navigation;
+  return(
+    <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'gray'}}>
+    <SearchBar
+    data={this.state.cocktailList}
+    handleResults={this._handleResults}
+    allDataOnEmptySearch
+    hideBack
+    showOnLoad/>
+    {this.state.results.length !== 0 ? this.searchResults() : this.noResults() }
+    </View>
+  );
+}
 }
 export default UserCocktail;
