@@ -18,6 +18,23 @@ const {height, width} = Dimensions.get('window');
 
 
 class Profile extends Component {
+
+  static navigationOptions = props => {
+  const { navigation } = props;
+  const { navigate } = navigation;
+  return {
+    headerMode: 'none',
+    headerVisible: false,
+    tabBarIcon: ({ tintColor }) =>(
+      <Icon
+        name='user-circle'
+        type='font-awesome'
+        size={20}
+      />
+    ),
+  }
+}
+
   state = {
     user: null,
     isVisible: false,
@@ -227,6 +244,7 @@ class Profile extends Component {
            >
              <Avatar
              width={200}
+             rounded
               size="xlarge"
               onPress={this.uploadImage}
               source={{uri: this.state.user.profileImage}}
@@ -247,7 +265,11 @@ class Profile extends Component {
           <View
            style={{ flexDirection: 'column', marginBottom: 10}}
           >
+           <View
+            style={{alignItems: 'center', justifyContent: 'center'}}
+           >
             <Text>Last Name</Text>
+           </View>
             <TextInput
               style={styles.inputStyle}
               onChangeText={(text) => this.onLastNameChange(text)}
@@ -259,10 +281,6 @@ class Profile extends Component {
           <View
            style={{ flexDirection: 'column', marginBottom: 10}}
           >
-             <Button
-               title='Create Your Cocktail'
-               onPress={this._onFormButtonPress.bind(this)}
-             />
           </View>
         </View>
        </ScrollView>
