@@ -16,6 +16,20 @@ const {height, width} = Dimensions.get('window');
 
 
 class CocktailDetail extends Component {
+  static navigationOptions = props => {
+  const { navigation } = props;
+  const { navigate } = navigation;
+  return {
+    tabBarVisible: false,
+    tabBarIcon: ({ tintColor }) =>(
+      <Icon
+        name='user-circle'
+        type='font-awesome'
+        size={20}
+      />
+    ),
+  }
+}
   constructor(props) {
     super(props);
     this.state = {
@@ -23,6 +37,8 @@ class CocktailDetail extends Component {
       cocktailUser: null,
     };
   }
+
+
   async componentDidMount(){
     const navParams = this.props.navigation.state.params.cocktail;
     const cocktailUser = await this.getUserInfo()
@@ -62,7 +78,7 @@ class CocktailDetail extends Component {
          style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 10, marginTop: 10}}
         >
          <Text
-
+          style={{ fontWeight: 'bold', letterSpacing: 2, fontSize: 20}}
          >{cocktail.name}
          </Text>
         </View>
@@ -71,29 +87,44 @@ class CocktailDetail extends Component {
         >
           <Image
             source={{ uri: cocktail.image}}
-            style={{  width: width * 0.75, height: 200}}
+            style={{  width: width * 0.75, height: 200, borderRadius: 8}}
           />
         </View>
         <View
           style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: 10 }}
         >
-            <Text>Ingredients:</Text>
+         <View>
+            <Text
+             style={{ fontSize: 20, marginBottom: 10 }}
+            >Ingredients</Text>
+        </View>
+        <View>
             <Text>{cocktail.ingredients}</Text>
+        </View>
         </View>
         <View
           style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: 10 }}
         >
-            <Text>Steps:</Text>
+          <View>
+            <Text
+            style={{ fontSize: 20, marginBottom: 10 }}
+            >Steps</Text>
+          </View>
+          <View>
             <Text>{cocktail.steps}</Text>
+          </View>
         </View>
         <View
-        style={{alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: width * 0.75, marginLeft: 10}}
+        style={{alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row',
+        width: width * 0.75, marginLeft: 15  }}
         >
             <Image
               source={{ uri: cocktailUser.profileImage}}
               style={{  width: 50, height: 50, marginBottom: 5, borderRadius: 50/2}}
             />
-            <Text>{cocktailUser.firstName}</Text>
+            <Text
+             style={{ fontSize: 15, fontWeight: 'bold'}}
+            >{cocktailUser.firstName}</Text>
         </View>
         </View>
 
