@@ -135,64 +135,6 @@ class CockatailForm extends Component {
    onRenderTextIngredient = (text) => {
 
    }
-
-   // _renderRow(rowData, rowId) {
-   //   console.log(rowId)
-   //    // console.log('rowData')
-   //   return (
-   //     <View
-   //     >
-   //      <Text>Ingredient</Text>
-   //       <TextInput
-   //       autoCapitalize='none'
-   //       autoCorrect={false}
-   //        style={{ width: 100, height: 50, borderWidth: 2, marginLeft: 14,
-   //        borderColor: 'gray', marginTop: 8, borderRadius: 8  }}
-   //       />
-   //     </View>
-   //   )
-   // }
-
-   // addIngredient(){
-   //   const { data } = this.state
-   //   const name2 = {
-   //     name: 'salem'
-   //   }
-   //   data.push(name2)
-   //   this.setState({
-   //     data: data,
-   //     dataSource: this.state.dataSource.cloneWithRows(this.state.data),
-   //   })
-   // }
-
-   // addSteps(){
-   //   this.setState({ stepsCounter: this.state.stepsCounter+= 1})
-   //   const { stepsDataSource,  dataForSteps } = this.state
-   //   const name2 = {
-   //     name: 'salem'
-   //   }
-   //   dataForSteps.push(name2)
-   //   this.setState({
-   //     dataForSteps: dataForSteps,
-   //     stepsDataSource: this.state.stepsDataSource.cloneWithRows(dataForSteps),
-   //   })
-   // }
-   //
-   // _renderRowForSteps(){
-   //   return (
-   //     <View
-   //     >
-   //      <Text>Step {this.state.stepsCounter}</Text>
-   //       <TextInput
-   //       autoCapitalize='none'
-   //       autoCorrect={false}
-   //        style={{ width: 100, height: 50, borderWidth: 2, marginLeft: 14,
-   //        borderColor: 'gray', marginTop: 8, borderRadius: 8  }}
-   //       />
-   //     </View>
-   //   )
-   // }
-
   render(){
     if(this.state.loading){
       return (
