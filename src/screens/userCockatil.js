@@ -41,6 +41,10 @@ class UserCocktail extends Component {
     this.props.navigation.navigate('cockatailForm')
   }
 
+  renderInput(){
+    this.props.navigation.navigate('inputScreen')
+  }
+
   render(){
     const { navigate } = this.props.navigation;
     return(
@@ -52,11 +56,11 @@ class UserCocktail extends Component {
       allDataOnEmptySearch
       hideBack
       showOnLoad/>
-      <ScrollView style={{paddingTop:70}}>
       <Button
+        style={{paddingTop: 70 }}
         title= 'create cocktail'
-        onPress={this.renderForm.bind(this)}
-      />
+        onPress={this.renderForm.bind(this)} />
+      <ScrollView>
       {this.state.results.length !== 0 ?
         this.state.results.map((result, i) => {
           return (
@@ -73,7 +77,7 @@ class UserCocktail extends Component {
           );
         })
         :
-        this.state.cocktailNames.map((name, i) => {
+        this.state.cocktailNames.map((cocktail, i) => {
           return (
             <TouchableHighlight
             key={i}
@@ -82,7 +86,7 @@ class UserCocktail extends Component {
               cocktail: name});
             }}>
             <Text>
-            {name}
+            {cocktail}
             </Text>
             </TouchableHighlight>
           );

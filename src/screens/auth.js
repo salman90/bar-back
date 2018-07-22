@@ -12,7 +12,7 @@ class Auth extends Component {
       if(userAuth){
         // this.setState({ loggedIn: true})
         // console.log(userAuth)
-        this.props.navigation.navigate('cocktailList')
+        this.props.navigation.navigate('profile')
       }
     })
   }

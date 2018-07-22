@@ -27,8 +27,8 @@ class CocktailDetail extends Component {
     }
     return (
       <View style={{paddingTop: 50}}>
-        <Text>Details on {this.state.cocktail.title}</Text>
-        <Text>Description: {this.state.cocktail.description}</Text>
+        <Text>Details on {this.state.cocktail.name}</Text>
+        <Text>Ingredients: {this.state.cocktail.ingredients}</Text>
         <Text>Steps: {this.state.cocktail.steps}</Text>
       </View>
     )
