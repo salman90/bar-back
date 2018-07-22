@@ -49,26 +49,6 @@ class UserCocktail extends Component {
     console.log(item)
     // this.props.navigation.navigate('cocktailDetail', {cocktail: item})
   }
-  searchResults(){
-    return(
-      <FlatList
-      style={{paddingTop: 70}}
-      data={this.state.results}
-      renderItem={this._renderItem.bind(this)}
-      keyExtractor={this._keyExtractor}
-      />
-    );
-  }
-  noResults(){
-    return(
-      <FlatList
-      style={{paddingTop: 70}}
-      data={this.state.cocktailList}
-      renderItem={this._renderItem.bind(this)}
-      keyExtractor={this._keyExtractor}
-      />
-    );
-  }
   _keyExtractor = item => (item.index || item.image)
   renderCocktail(item){
     // console.log(item)
