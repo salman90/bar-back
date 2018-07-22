@@ -49,13 +49,8 @@ class UserCocktail extends Component {
     const { navigate } = this.props.navigation;
     return(
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
-      <SearchBar
-      ref={(ref) => this.searchBar = ref}
-      data={this.state.cocktailNames}
-      handleResults={this._handleResults}
-      allDataOnEmptySearch
-      hideBack
-      showOnLoad/>
+
+      <ScrollView style={{paddingTop:70}}>
       <Button
         style={{paddingTop: 70 }}
         title= 'create cocktail'
