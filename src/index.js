@@ -43,7 +43,7 @@ class App extends React.Component {
           cocktailList:   {
             screen: createStackNavigator({
               cocktailList: {screen: CoctailList },
-              cocktailDetail: { screen: CocktailDetail},
+              renderCocktail: { screen: CocktailDetail},
             })
           },
         })
