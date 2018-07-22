@@ -30,9 +30,9 @@ class UserCocktail extends Component {
   Lister(){
     firebase.database().ref('/user_cocktails/'+`${this.state.user.uid}`).on('value', (snapshot) =>{
       if(snapshot.val() !== null){
-        this.setState({cocktailnames: Object.keys(snapshot.val())});
+        this.setState({cocktailNames: Object.keys(snapshot.val()) })
       } else {
-        this.setState({cocktailnames: ["Add Cocktails!"]});
+        this.setState({cocktailNames: ["Add Cocktails!"]});
       }
     });
   }
@@ -52,17 +52,17 @@ class UserCocktail extends Component {
 
       <ScrollView style={{paddingTop:70}}>
       <Button
+        style={{paddingTop: 70 }}
         title= 'create cocktail'
-        onPress={this.renderForm.bind(this)}
-      />
-
+        onPress={this.renderForm.bind(this)} />
+      <ScrollView>
       {this.state.results.length !== 0 ?
         this.state.results.map((result, i) => {
           return (
             <TouchableHighlight
             key={i}
             style={{paddingTop: 5}}
-            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
+            onPress={() => {this.props.navigation.navigate('userCocktailDetail', {
               cocktail: result});
             }}>
             <Text>
@@ -72,16 +72,16 @@ class UserCocktail extends Component {
           );
         })
         :
-        this.state.cocktailNames.map((name, i) => {
+        this.state.cocktailNames.map((cocktail, i) => {
           return (
             <TouchableHighlight
             key={i}
             style={{paddingTop: 5}}
-            onPress={() => {this.props.navigation.navigate('cocktailDetail', {
+            onPress={() => {this.props.navigation.navigate('userCocktailDetail', {
               cocktail: name});
             }}>
             <Text>
-            {name}
+            {cocktail}
             </Text>
             </TouchableHighlight>
           );

@@ -96,6 +96,7 @@ class CocktailDetail extends Component {
             <Text>{cocktailUser.firstName}</Text>
         </View>
         </View>
+
       </View>
     )
    }
