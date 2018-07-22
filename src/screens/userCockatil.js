@@ -116,7 +116,21 @@ render(){
     allDataOnEmptySearch
     hideBack
     showOnLoad/>
-    {this.state.results.length !== 0 ? this.searchResults() : this.noResults() }
+    {this.state.results.length !== 0 ?
+      <FlatList
+      style={{paddingTop: 70}}
+      data={this.state.results}
+      renderItem={this._renderItem.bind(this)}
+      keyExtractor={this._keyExtractor}
+      />
+      :
+      <FlatList
+      style={{paddingTop: 70}}
+      data={this.state.cocktailList}
+      renderItem={this._renderItem.bind(this)}
+      keyExtractor={this._keyExtractor}
+      />
+    }
     </View>
   );
 }
