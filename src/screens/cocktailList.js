@@ -166,6 +166,36 @@ renderCocktail(item){
     })
   }
 
+   renderPlus(post){
+    const { user } = this.state
+    const userUid =  user.uid
+    const postKey = post._key
+    console.log(userUid)
+     console.log(postKey)
+     // console.log(post)
+     const name = post.name
+     const image = post.image
+     const steps = post.steps
+     const uid  = post.uid
+     const userImage = post.userImage
+     const userName = post.userName
+     const ingredients = post.ingredients
+     console.log(name, 'name')
+     console.log(image, 'image')
+     console.log(steps, 'steps')
+     console.log(uid, 'uid')
+     console.log(userImage, 'userImage')
+     console.log(userName, 'userName')
+     firebase.database().ref('user_cocktails').child(userUid).child(postKey).set({
+       name: name,
+       image: image,
+       steps: steps,
+       uid: uid,
+       userImage: userImage,
+       userName: userName,
+       _key: postKey
+     })
+   }
 
   renderIcons = (item) => {
     const { user } = this.state
@@ -208,6 +238,9 @@ renderCocktail(item){
       )
     }else{
       return (
+      <View
+       style={{ flexDirection: 'row', marginTop: 10}}
+      >
         <View
         style={{ marginTop: 10, flexDirection: 'row'}}
         >
@@ -217,9 +250,17 @@ renderCocktail(item){
             type='font-awesome'
             iconStyle={{ color: this.state.iconColor }}
             onPress={this.likedCocktail.bind(this,item)}
-
           />
           <Text>{item.numberOfLikes}</Text>
+        </View>
+         <View>
+           <Icon
+            name='plus-square'
+            type='font-awesome'
+            size={25}
+            onPress={this.renderPlus.bind(this, item)}
+           />
+         </View>
         </View>
       )
     }

@@ -35,6 +35,7 @@ class Profile extends Component {
       const user =  snapshot.val()
       this.setState({ user: user })
     })
+
   }
 
   onFirstNameChange = (text) =>  {
@@ -175,6 +176,13 @@ class Profile extends Component {
               autoCapitalize='none'
               autoCorrect={false}
               underlineColorAndroid='rgba(0,0,0,0)'
+            />
+          </View>
+          <View>
+            <Button
+              title='View  List'
+              buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+              onPress={() => this.props.navigation.navigate('userPersonalList', {user: this.state.userInfo})}
             />
           </View>
         </View>
