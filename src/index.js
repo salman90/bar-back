@@ -8,6 +8,7 @@ import Auth from './screens/auth';
 import CocktailDetail from './screens/cocktailDetail';
 import UserCocktailDetail from './screens/userCocktailDetail';
 import PorfileUser from './screens/profileUser';
+import UserPersonalList from './screens/userpersonallist'
 import {
   createBottomTabNavigator,
   createStackNavigator,
@@ -34,7 +35,12 @@ class App extends React.Component {
       auth: {screen: Auth },
       main: {
         screen: createBottomTabNavigator({
-          profile: {screen: Profile },
+          profile: {
+            screen: createStackNavigator({
+              profile: {screen: Profile },
+              userPersonalList: {screen: UserPersonalList},
+            })
+          },
           userCockatil:{
             screen: createStackNavigator({
               usercocktail: {screen: UserCocktail},
