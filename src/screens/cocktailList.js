@@ -9,6 +9,7 @@ import  {
   Alert,
   Dimensions,
   StatusBar,
+  Animated,
 } from 'react-native';
 import * as firebase from 'firebase';
 import SearchBar from 'react-native-searchbar';
@@ -22,23 +23,6 @@ const {height, width} = Dimensions.get('window');
 
 
 class CoctailList extends Component {
-
-  static navigationOptions = props => {
-  const { navigation } = props;
-  const { navigate } = navigation;
-  return {
-    headerMode: 'none',
-    headerVisible: false,
-    header: null,
-    tabBarIcon: ({ tintColor }) =>(
-      <Icon
-        name='user-circle'
-        type='font-awesome'
-        size={20}
-      />
-    ),
-  }
-}
   constructor(props){
     super(props);
     this.state = {
@@ -49,7 +33,9 @@ class CoctailList extends Component {
       user: firebase.auth().currentUser,
       iconColor: '#000',
       liked: null,
-      numberOfLikes: 0
+      numberOfLikes: 0,
+      animatedValue: new Animated.Value(1),
+      animatedValue2: new Animated.Value(0),
     };
     this._handleResults = this._handleResults.bind(this);
   }
@@ -94,17 +80,6 @@ class CoctailList extends Component {
     console.log(uid)
   }
 
-  getUsersProfile(uid) {
-    // return firebase.database().ref('users').child(uid).once('value', snap => {
-    //   let like =  snap.val()
-    //   this.setState({ like: snap.val() })
-    // })
-  }
-
-   showCocktailDetail(item){
-     // console.log(item)
-     // this.props.navigation.navigate('cocktailDetail', {cocktail: item})
-   }
 
 _keyExtractor = item => (item.index || item.image)
 
@@ -146,6 +121,10 @@ renderCocktail(item){
           ref.child('likes').update(likesUpdate)
           ref.child('cocktail_list').child(itemKey).update({
             numberOfLikes: item.numberOfLikes + 1
+          }, (error) => {
+            if(error){
+              alert('could not like post please try again')
+            }
           })
         }else {
           firebase.database().ref('likes').child(itemKey).child(userUid).remove()
@@ -166,26 +145,28 @@ renderCocktail(item){
     })
   }
 
+  renderAnimation(){
+    Animated.timing(this.state.animatedValue, {
+      toValue: 0,
+      duration: 250,
+    }).start(() => {
+      Animated.timing(this.state.animatedValue2, {
+        toValue: 1,
+        duration: 250,
+      }).start()
+    })
+  }
+
    renderPlus(post){
     const { user } = this.state
     const userUid =  user.uid
     const postKey = post._key
-    console.log(userUid)
-     console.log(postKey)
-     // console.log(post)
-     const name = post.name
-     const image = post.image
-     const steps = post.steps
-     const uid  = post.uid
-     const userImage = post.userImage
-     const userName = post.userName
-     const ingredients = post.ingredients
-     console.log(name, 'name')
-     console.log(image, 'image')
-     console.log(steps, 'steps')
-     console.log(uid, 'uid')
-     console.log(userImage, 'userImage')
-     console.log(userName, 'userName')
+    const name = post.name
+    const image = post.image
+    const steps = post.steps
+    const uid  = post.uid
+    const userImage = post.userImage
+    const userName  = post.userName
      firebase.database().ref('user_cocktails').child(userUid).child(postKey).set({
        name: name,
        image: image,
@@ -194,6 +175,13 @@ renderCocktail(item){
        userImage: userImage,
        userName: userName,
        _key: postKey
+     }, (error) => {
+       if(error){
+         alert('could not add to the list try again' + error)
+       }else{
+         // this.renderAnimation()
+         alert('saved to list')
+       }
      })
    }
 
@@ -237,29 +225,37 @@ renderCocktail(item){
       </View>
       )
     }else{
+
+
       return (
       <View
-       style={{ flexDirection: 'row', marginTop: 10}}
+       style={{flexDirection: 'row', marginTop: 10,  justifyContent: 'space-around'}}
       >
-        <View
-        style={{ marginTop: 10, flexDirection: 'row'}}
+        <Animated.View
+         style={{flexDirection: 'row'}}
         >
-          <Icon
-           name='thumbs-up'
-           size={20}
-            type='font-awesome'
-            iconStyle={{ color: this.state.iconColor }}
-            onPress={this.likedCocktail.bind(this,item)}
-          />
-          <Text>{item.numberOfLikes}</Text>
-        </View>
-         <View>
+         <Animated.View
+         >
            <Icon
             name='plus-square'
             type='font-awesome'
             size={25}
             onPress={this.renderPlus.bind(this, item)}
            />
+         </Animated.View>
+        </Animated.View>
+
+         <View
+         style={{ marginTop: 10, flexDirection: 'row'}}
+         >
+           <Icon
+            name='thumbs-up'
+            size={20}
+             type='font-awesome'
+             iconStyle={{ color: this.state.iconColor }}
+             onPress={this.likedCocktail.bind(this,item)}
+           />
+           <Text>{item.numberOfLikes}</Text>
          </View>
         </View>
       )
@@ -267,6 +263,7 @@ renderCocktail(item){
   }
 
   _renderItem({item, index}) {
+
     return (
        <Card
         containerStyle={{ borderRadius: 10, marginBottom: 8 }}
@@ -315,7 +312,6 @@ renderCocktail(item){
              style={{ fontSize: 15, fontWeight: 'bold'}}
              >{item.userName}</Text>
              </View>
-
            </View>
        </Card>
     )

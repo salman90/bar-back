@@ -125,6 +125,19 @@ class Profile extends Component {
     // })
   }
 
+  SignOut = (callback) => {
+    firebase.auth().signOut()
+    callback()
+  }
+
+  logOut(){
+    console.log('in log out')
+    this.SignOut(() => {
+      console.log('in call back')
+      this.props.navigation.navigate('auth')
+    })
+  }
+
 
   render(){
     const {user, userInfo} = this.state
@@ -184,6 +197,15 @@ class Profile extends Component {
               buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
               onPress={() => this.props.navigation.navigate('userPersonalList', {user: this.state.userInfo})}
             />
+          </View>
+          <View
+           style={{ marginTop: 10 }}
+          >
+           <Button
+           title='logout'
+           buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+           onPress={this.logOut.bind(this)}
+           />
           </View>
         </View>
        </ScrollView>
