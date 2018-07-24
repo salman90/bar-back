@@ -130,7 +130,12 @@ class CockatailForm extends Component {
        image: image,
        userName: userName,
        userImage: userImage,
-
+     }, (error) =>{
+       if(error){
+         alert("Data could not be saved" + error)
+       }else{
+         alert('Data was saved successfully')
+       }
      })
      const saveDataToMainList = await firebase.database().ref('cocktail_list').push({
        name: name,
