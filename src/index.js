@@ -7,6 +7,7 @@ import CockatailForm from './screens/cockatailForm';
 import Auth from './screens/auth';
 import CocktailDetail from './screens/cocktailDetail';
 import UserCocktailDetail from './screens/userCocktailDetail';
+import PorfileUser from './screens/profileUser';
 import {
   createBottomTabNavigator,
   createStackNavigator,
@@ -37,7 +38,7 @@ class App extends React.Component {
           userCockatil:{
             screen: createStackNavigator({
               usercocktail: {screen: UserCocktail},
-              cockatailForm: {screen: CockatailForm},
+              cockatailForm: {screen: CockatailForm, navigationOptions: { tabBarVisible: false }},
               userCocktailDetail: { screen: UserCocktailDetail }
             })
           },
@@ -45,6 +46,7 @@ class App extends React.Component {
             screen: createStackNavigator({
               cocktailList: {screen: CoctailList },
               renderCocktail: { screen: CocktailDetail},
+              userProfile: {screen: PorfileUser }
             })
           },
         }, {
@@ -52,7 +54,7 @@ class App extends React.Component {
             showLabel: true,
 			      showIcon: true,
             activeTintColor: '#d074dc',
-            inactiveTintColor: '#fff',
+            inactiveTintColor: '#000',
           },
         })
       }

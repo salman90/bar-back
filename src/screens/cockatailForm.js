@@ -40,15 +40,22 @@ class CockatailForm extends Component {
           }),
      dataForSteps: [],
      stepsCounter: 1,
+     profileInfo: null,
 
   }
 
   static navigationOptions = props => {
   const { navigation } = props;
   const { navigate } = navigation;
+  console.log(navigation)
   return {
-
+    backgroundColor: 'transparent',
+    position: 'absolute',
     tabBarVisible: false,
+    zIndex: 100,
+    top: 0,
+    left: 0,
+    right: 0
   }
 }
   componentWillMount() {
@@ -63,9 +70,10 @@ class CockatailForm extends Component {
     const userUid = user.uid
     this.setState({
       user: user,
-      // data: data,
-      // dataSource: this.state.dataSource.cloneWithRows(this.state.data),
-      // stepsDataSource: this.state.stepsDataSource.cloneWithRows(this.state.dataForSteps)
+    })
+    firebase.database().ref('users').child(userUid).once('value', snap =>{
+      const profileInfo = snap.val()
+      this.setState({profileInfo: profileInfo })
     })
    }
    uploadCoctailImage = async () =>{
@@ -106,16 +114,23 @@ class CockatailForm extends Component {
    };
 
    createForm = async () => {
-     const { user, image, ingredients, steps, name } = this.state
-     // console.log()
+     const { user, image, ingredients, steps, name, profileInfo } = this.state
      this.setState({ loading: true })
      const userUid = user.uid
+     // this.getCocktailCreator(userUid)
+     const userName = `${profileInfo.firstName} ${profileInfo.lastName}`
+     const userImage = `${profileInfo.profileImage}`
+     // console.log(userName)
+     // console.log(userImage)
      const saveDataToUserList = await firebase.database().ref('user_cocktails').child(userUid).push({
        name: name,
        ingredients: ingredients,
        steps: steps,
        uid: userUid,
        image: image,
+       userName: userName,
+       userImage: userImage,
+
      })
      const saveDataToMainList = await firebase.database().ref('cocktail_list').push({
        name: name,
@@ -123,6 +138,9 @@ class CockatailForm extends Component {
        steps: steps,
        uid: userUid,
        image: image,
+       userName: userName,
+       userImage: userImage,
+
      })
      this.setState({ loading: false,
                     image:  'https://firebasestorage.googleapis.com/v0/b/bar-back-c3947.appspot.com/o/images%2Fdefault.jpg?alt=media&token=2c51fbb0-9f67-41ed-9110-ccb778065394',
@@ -131,6 +149,7 @@ class CockatailForm extends Component {
                     name: ''
                                   })
    }
+
 
    onRenderTextIngredient = (text) => {
 
