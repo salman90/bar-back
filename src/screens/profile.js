@@ -18,23 +18,6 @@ const {height, width} = Dimensions.get('window');
 
 
 class Profile extends Component {
-
-  static navigationOptions = props => {
-  const { navigation } = props;
-  const { navigate } = navigation;
-  return {
-    headerMode: 'none',
-    headerVisible: false,
-    tabBarIcon: ({ tintColor }) =>(
-      <Icon
-        name='user-circle'
-        type='font-awesome'
-        size={20}
-      />
-    ),
-  }
-}
-
   state = {
     user: null,
     isVisible: false,
@@ -141,88 +124,6 @@ class Profile extends Component {
     // })
   }
 
-  renderFormModal(){
-    return (
-      <Modal
-      visible={this.state.isVisible}
-      transparent={true}
-      >
-      <TouchableWithoutFeedback
-        onPress={this.onCloseModalPress.bind(this)}
-      >
-       <View
-         style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}
-       >
-        <View
-         style={{ width: width * 0.90, height: height * 0.5, backgroundColor: 'red',
-         borderRadius: 5 }}
-        >
-          <View
-           style={{alignItems: 'center', justifyContent: 'center', marginTop: 20}}
-          >
-             <Text>Cocktail Title</Text>
-          </View>
-          <View>
-             <TextInput
-              autoCapitalize='none'
-              autoCorrect={false}
-               style={{ width: '90%', height: 50, borderWidth: 2, marginLeft: 14,
-               borderColor: 'gray', marginTop: 8, borderRadius: 8  }}
-               onChangeText={(text) => this.setState({ title: text})}
-               value={this.state.title}
-             />
-          </View>
-          <View
-            style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10}}
-          >
-             <Text>Ingredients</Text>
-          </View>
-          <View>
-          <TextInput
-            multiline={true}
-            autoCapitalize='none'
-            autoCorrect={false}
-            style={{ width: '90%', height: 70, borderWidth: 2, marginLeft: 14,
-            borderColor: 'gray', marginTop: 8, marginBottom: 10, borderRadius: 8 }}
-            onChangeText={(text) => this.setState({ description: text}) }
-            value={this.state.description}
-          />
-          </View>
-          <View
-           style={{alignItems: 'center', justifyContent: 'center'}}
-          >
-          <TouchableWithoutFeedback
-           onPress={this.uploadCoctailImage.bind(this)}
-          >
-            <View
-             style={{width: '50%', height: 50, backgroundColor: 'gray', flexDirection:'row', alignItems: 'center', justifyContent: 'center', marginTop: 10}}
-            >
-             <Text>Upload Image</Text>
-             <Icon
-             name='upload'
-             size={20}
-             type='font-awesome'
-             containerStyle={{marginLeft: 8}}
-             />
-            </View>
-
-          </TouchableWithoutFeedback>
-          <View
-           style={{ marginTop: 10}}
-          >
-            <Button
-              title='Submit Cocktail'
-              onPress={this.createCocktail.bind(this)}
-            />
-          </View>
-          </View>
-        </View>
-      </View>
-       </TouchableWithoutFeedback>
-    </Modal>
-    )
-  }
-
 
   render(){
     const {user, userInfo} = this.state
@@ -243,8 +144,8 @@ class Profile extends Component {
             style={{ flexDirection: 'column', marginBottom: 10}}
            >
              <Avatar
-             width={200}
-             rounded
+              width={200}
+              rounded
               size="xlarge"
               onPress={this.uploadImage}
               source={{uri: this.state.user.profileImage}}
@@ -260,31 +161,24 @@ class Profile extends Component {
              value={this.state.user.firstName}
              autoCapitalize='none'
              autoCorrect={false}
+             underlineColorAndroid='rgba(0,0,0,0)'
              />
           </View>
           <View
            style={{ flexDirection: 'column', marginBottom: 10}}
           >
-           <View
-            style={{alignItems: 'center', justifyContent: 'center'}}
-           >
             <Text>Last Name</Text>
-           </View>
             <TextInput
               style={styles.inputStyle}
               onChangeText={(text) => this.onLastNameChange(text)}
               value={this.state.user.lastName}
               autoCapitalize='none'
               autoCorrect={false}
+              underlineColorAndroid='rgba(0,0,0,0)'
             />
-          </View>
-          <View
-           style={{ flexDirection: 'column', marginBottom: 10}}
-          >
           </View>
         </View>
        </ScrollView>
-       {this.renderFormModal()}
     </View>
     )
   }
