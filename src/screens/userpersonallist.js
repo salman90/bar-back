@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, Image, TouchableHighlight } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableHighlight,
+  ActivityIndicator,
+  Alert  } from 'react-native';
 import firebase from 'firebase';
 import { Card, Button, Icon } from 'react-native-elements';
 
@@ -8,10 +15,10 @@ class UserPersonalList extends Component {
   state = {
     cocktailList: null
   }
-  componentDidMount() {
+  componentWillMount() {
     const navParams = this.props.navigation.state.params.user;
     const userUid = navParams.uid
-    firebase.database().ref('user_cocktails').child(userUid).once('value', snap => {
+    firebase.database().ref('user_cocktails').child(userUid).on('value', snap => {
       const list = []
       snap.forEach((child) => {
         list.push({
@@ -34,6 +41,30 @@ class UserPersonalList extends Component {
 
   renderCocktail(item){
     this.props.navigation.navigate('renderCocktail', {cocktail: item } )
+  }
+
+  renderRemoveFromList(post){
+    const navParams = this.props.navigation.state.params.user;
+    const userUid = navParams.uid
+    const postKey = post._key
+    const postName = post.name
+    Alert.alert(
+      'Delete',
+      `Are you sure you want to delete ${postName}`,
+      [
+        {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+        {text: 'Yes', onPress: this.deleteListItem.bind(this,userUid,postKey)},
+
+      ],
+      { cancelable: false }
+    )
+  }
+
+  deleteListItem(userUid, postKey){
+    console.log('in function')
+    console.log(userUid)
+    console.log(postKey)
+    firebase.database().ref('user_cocktails').child(userUid).child(postKey).remove()
   }
 
   _renderItem({item, index}) {
@@ -62,6 +93,16 @@ class UserPersonalList extends Component {
              title='View Details'
              onPress={this.renderCocktail.bind(this, item)}
              buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+          />
+        </View>
+        <View
+         style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10}}
+        >
+          <Icon
+           type='font-awesome'
+           name='times-circle'
+           size={25}
+           onPress={this.renderRemoveFromList.bind(this, item)}
           />
         </View>
         <View
@@ -95,7 +136,9 @@ class UserPersonalList extends Component {
            <View
             style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}
            >
-             <Text>loading</Text>
+            <ActivityIndicator
+            size="large" color="#0000ff"
+            />
            </View>
          )
        }else {
