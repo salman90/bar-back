@@ -9,6 +9,7 @@ import  {
   Image,
 } from 'react-native';
 import * as firebase from 'firebase';
+import { createStackNavigator } from 'react-navigation';
 
 
 
@@ -17,19 +18,19 @@ const {height, width} = Dimensions.get('window');
 
 class CocktailDetail extends Component {
   static navigationOptions = props => {
-  const { navigation } = props;
-  const { navigate } = navigation;
-  return {
-    tabBarVisible: false,
-    tabBarIcon: ({ tintColor }) =>(
-      <Icon
+    const { navigation } = props;
+    const { navigate } = navigation;
+    return {
+      tabBarVisible: false,
+      tabBarIcon: ({ tintColor }) =>(
+        <Icon
         name='user-circle'
         type='font-awesome'
         size={20}
-      />
-    ),
+        />
+      ),
+    }
   }
-}
   constructor(props) {
     super(props);
     this.state = {
@@ -61,75 +62,78 @@ class CocktailDetail extends Component {
     if(cocktail === null || cocktailUser === null ){
       return (
         <View
-         style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}
+        style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}
         >
-         <Text>Loading ....</Text>
+        <Text>Loading ....</Text>
         </View>
       )
     }else{
 
-    return (
-      <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, padding: 20, marginBottom: 5 }}>
-      <View
-       style={{width: width * 0.90, backgroundColor: '#fff', borderRadius: 8}}
-      >
+      return (
+        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, padding: 20, marginBottom: 5 }}>
         <View
-         style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 10, marginTop: 10}}
+        style={{width: width * 0.90, backgroundColor: '#fff', borderRadius: 8}}
         >
-         <Text
-          style={{ fontWeight: 'bold', letterSpacing: 2, fontSize: 20}}
-         >{cocktail.name}
-         </Text>
+        <View
+        style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 10, marginTop: 10}}
+        >
+        <Text
+        style={{ fontWeight: 'bold', letterSpacing: 2, fontSize: 20}}
+        >{cocktail.name}
+        </Text>
         </View>
         <View
-         style={{ alignItems: 'center', justifyContent: 'center' }}
+        style={{ alignItems: 'center', justifyContent: 'center' }}
         >
-          <Image
-            source={{ uri: cocktail.image}}
-            style={{  width: width * 0.75, height: 200, borderRadius: 8}}
-          />
+        <Image
+        source={{ uri: cocktail.image}}
+        style={{  width: width * 0.75, height: 200, borderRadius: 8}}
+        />
         </View>
         <View
-          style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: 10 }}
+        style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: 10 }}
         >
-         <View>
-            <Text
-             style={{ fontSize: 20, marginBottom: 10 }}
-            >Ingredients</Text>
+        <View>
+        <Text
+        style={{ fontSize: 20, marginBottom: 10 }}
+        >Ingredients</Text>
         </View>
         <View>
-            <Text>{cocktail.ingredients}</Text>
+        <Text>{cocktail.ingredients}</Text>
         </View>
         </View>
         <View
-          style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: 10 }}
+        style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: 10 }}
         >
-          <View>
-            <Text
-            style={{ fontSize: 20, marginBottom: 10 }}
-            >Steps</Text>
-          </View>
-          <View>
-            <Text>{cocktail.steps}</Text>
-          </View>
+        <View>
+        <Text
+        style={{ fontSize: 20, marginBottom: 10 }}
+        >Steps</Text>
+        </View>
+        <View>
+        <Text>{cocktail.steps}</Text>
+        </View>
         </View>
         <View
         style={{alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row',
         width: width * 0.75, marginLeft: 15, marginTop: 10  }}
         >
-            <Image
-              source={{ uri: cocktailUser.profileImage}}
-              style={{  width: 50, height: 50, marginBottom: 5, borderRadius: 50/2}}
-            />
-            <Text
-             style={{ fontSize: 15, fontWeight: 'bold'}}
-            >{cocktailUser.firstName}</Text>
+        <TouchableHighlight
+        onPress={() => this.props.navigation.navigate('userProfile', {userUid: cocktailUser.uid})}>
+        <Image
+        source={{ uri: cocktailUser.profileImage}}
+        style={{  width: 50, height: 50, marginBottom: 5, borderRadius: 50/2}}
+        />
+        </TouchableHighlight>
+        <Text
+        style={{ fontSize: 15, fontWeight: 'bold'}}
+        >{cocktailUser.firstName}</Text>
         </View>
         </View>
 
-      </View>
-    )
-   }
+        </View>
+      )
+    }
   }
 }
 
