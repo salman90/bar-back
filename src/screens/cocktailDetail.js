@@ -17,20 +17,20 @@ const {height, width} = Dimensions.get('window');
 
 
 class CocktailDetail extends Component {
-  static navigationOptions = props => {
-    const { navigation } = props;
-    const { navigate } = navigation;
-    return {
-      tabBarVisible: false,
-      tabBarIcon: ({ tintColor }) =>(
-        <Icon
-        name='user-circle'
-        type='font-awesome'
-        size={20}
-        />
-      ),
-    }
-  }
+  // static navigationOptions = props => {
+  //   const { navigation } = props;
+  //   const { navigate } = navigation;
+  //   return {
+  //     tabBarVisible: false,
+  //     tabBarIcon: ({ tintColor }) =>(
+  //       <Icon
+  //       name='user-circle'
+  //       type='font-awesome'
+  //       size={20}
+  //       />
+  //     ),
+  //   }
+  //}
   constructor(props) {
     super(props);
     this.state = {
@@ -58,7 +58,9 @@ class CocktailDetail extends Component {
 
 
   render(){
+    const { navigate } = this.props.navigation;
     const { cocktail, cocktailUser} = this.state
+    console.log(cocktail)
     if(cocktail === null || cocktailUser === null ){
       return (
         <View
@@ -119,7 +121,7 @@ class CocktailDetail extends Component {
         width: width * 0.75, marginLeft: 15, marginTop: 10  }}
         >
         <TouchableHighlight
-        onPress={() => this.props.navigation.navigate('userProfile', {userUid: cocktailUser.uid})}>
+        onPress={() => this.props.navigation.navigate('userProfile', {userUid: cocktail.uid})}>
         <Image
         source={{ uri: cocktailUser.profileImage}}
         style={{  width: 50, height: 50, marginBottom: 5, borderRadius: 50/2}}
