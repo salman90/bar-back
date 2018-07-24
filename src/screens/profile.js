@@ -35,6 +35,7 @@ class Profile extends Component {
       const user =  snapshot.val()
       this.setState({ user: user })
     })
+
   }
 
   onFirstNameChange = (text) =>  {
@@ -124,6 +125,19 @@ class Profile extends Component {
     // })
   }
 
+  SignOut = (callback) => {
+    firebase.auth().signOut()
+    callback()
+  }
+
+  logOut(){
+    console.log('in log out')
+    this.SignOut(() => {
+      console.log('in call back')
+      this.props.navigation.navigate('auth')
+    })
+  }
+
 
   render(){
     const {user, userInfo} = this.state
@@ -176,6 +190,22 @@ class Profile extends Component {
               autoCorrect={false}
               underlineColorAndroid='rgba(0,0,0,0)'
             />
+          </View>
+          <View>
+            <Button
+              title='View  List'
+              buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+              onPress={() => this.props.navigation.navigate('userPersonalList', {user: this.state.userInfo})}
+            />
+          </View>
+          <View
+           style={{ marginTop: 10 }}
+          >
+           <Button
+           title='logout'
+           buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+           onPress={this.logOut.bind(this)}
+           />
           </View>
         </View>
        </ScrollView>
