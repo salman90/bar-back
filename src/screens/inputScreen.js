@@ -37,7 +37,6 @@ class InputScreen extends Component {
     const userUid = user.uid
     // this.state.listView
     // let newData = []
-    const that = this
      // firebase.database().ref('user_cocktails').child(userUid).on('value', (snapshot) =>{
        // const cocktailList = snapshot.val()
             // const data = snapshot.val()
@@ -80,7 +79,6 @@ class InputScreen extends Component {
   }
 
   addData() {
-    console.log('in add Data')
     const data = this.state.data
     const Kiwi = {name: 'kiwi'}
     data.push(Kiwi);
