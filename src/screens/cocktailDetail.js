@@ -42,7 +42,6 @@ class CocktailDetail extends Component {
   async componentDidMount(){
     const navParams = this.props.navigation.state.params.cocktail;
     const cocktailUser = await this.getUserInfo()
-    // console.log(cocktailUser.email)
     this.setState({ cocktail: navParams})
   }
 
@@ -116,7 +115,7 @@ class CocktailDetail extends Component {
         </View>
         <View
         style={{alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row',
-        width: width * 0.75, marginLeft: 15  }}
+        width: width * 0.75, marginLeft: 15, marginTop: 10  }}
         >
             <Image
               source={{ uri: cocktailUser.profileImage}}
