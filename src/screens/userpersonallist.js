@@ -37,7 +37,7 @@ class UserPersonalList extends Component {
     })
   }
 
-  _keyExtractor = item => (item.index || item.image)
+  _keyExtractor = item => (item.index || item._key)
 
   renderCocktail(item){
     this.props.navigation.navigate('renderCocktail', {cocktail: item } )
@@ -61,9 +61,6 @@ class UserPersonalList extends Component {
   }
 
   deleteListItem(userUid, postKey){
-    console.log('in function')
-    console.log(userUid)
-    console.log(postKey)
     firebase.database().ref('user_cocktails').child(userUid).child(postKey).remove()
   }
 
