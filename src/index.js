@@ -50,12 +50,7 @@ class App extends React.Component {
           cocktailList:   {
             screen: createStackNavigator({
               cocktailList:   { screen: CoctailList },
-              renderCocktail: {
-                screen: createStackNavigator({
-                  renderCocktail:   { screen: CocktailDetail },
-                  userProfile:      { screen: PorfileUser }
-                })
-              },
+              renderCocktail: { screen: CocktailDetail },
               userProfile:    { screen: PorfileUser }
             })
           },

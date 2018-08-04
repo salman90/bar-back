@@ -60,7 +60,6 @@ class CocktailDetail extends Component {
   render(){
     const { navigate } = this.props.navigation;
     const { cocktail, cocktailUser} = this.state
-    console.log(cocktail)
     if(cocktail === null || cocktailUser === null ){
       return (
         <View
