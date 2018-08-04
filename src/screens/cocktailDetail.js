@@ -16,20 +16,20 @@ const {height, width} = Dimensions.get('window');
 
 
 class CocktailDetail extends Component {
-  static navigationOptions = props => {
-  const { navigation } = props;
-  const { navigate } = navigation;
-  return {
-    tabBarVisible: false,
-    tabBarIcon: ({ tintColor }) =>(
-      <Icon
-        name='user-circle'
-        type='font-awesome'
-        size={20}
-      />
-    ),
-  }
-}
+//   static navigationOptions = props => {
+//   const { navigation } = props;
+//   const { navigate } = navigation;
+//   return {
+//     tabBarVisible: false,
+//     tabBarIcon: ({ tintColor }) =>(
+//       <Icon
+//         name='user-circle'
+//         type='font-awesome'
+//         size={20}
+//       />
+//     ),
+//   }
+// }
   constructor(props) {
     super(props);
     this.state = {

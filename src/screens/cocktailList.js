@@ -10,12 +10,15 @@ import  {
   Dimensions,
   StatusBar,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
 import * as firebase from 'firebase';
+import { BlurView } from 'expo';
 import SearchBar from 'react-native-searchbar';
 import fontAwesome from 'react-native-vector-icons';
 import { createStackNavigator } from 'react-navigation';
 import { Card, Button, Icon } from 'react-native-elements';
+// import type { StyleObj as Style } from "react-native/Libraries/StyleSheet/StyleSheetTypes";
 import _ from 'lodash';
 
 
@@ -27,7 +30,6 @@ class CoctailList extends Component {
     super(props);
     this.state = {
       cocktailNames: [],
-      results: [],
       cocktailList: [],
       likeCounter: 1,
       user: firebase.auth().currentUser,
@@ -36,52 +38,88 @@ class CoctailList extends Component {
       numberOfLikes: 0,
       animatedValue: new Animated.Value(1),
       animatedValue2: new Animated.Value(0),
+      page: 5,
+      refreshing: false,
+      loading: false,
     };
     this._handleResults = this._handleResults.bind(this);
   }
 
 
+//   static navigationOptions = props => {
+//   const { navigation } = props;
+//   const { navigate } = navigation;
+//   return {
+//     title: 'BarbBack',
+//     titleStyle: {
+//        color: '#fff'
+//      },
+//
+//   }
+// }
 
 
 
-  async componentWillMount(){
+
+
+
+
+
+  async componentDidMount(){
     this.Lister()
   }
   _handleResults(results){
     this.setState({ results });
   }
   Lister = async () => {
-    const ref = firebase.database().ref('/cocktail_list')
+    console.log('in function again')
+    const { page } = this.state
+    // firebase.database.ref('users').child('cocktail_list').orderByKey().once()
+    this.setState({ loading: true })
+    let referenceToOldestKey = ''
+    // if(!referenceToOldestKey){
+      const ref = firebase.database().ref('/cocktail_list')
+       ref.on('value', (snapshot) =>{
+        // const data = snapshot.val()
 
-     ref.on('value', (snapshot) =>{
-      const data = snapshot.val()
+        const list = []
+        snapshot.forEach((child) => {
 
-      const list = []
-      snapshot.forEach((child) => {
-
-        list.push({
-          name: child.val().name,
-          userName: child.val().userName,
-          userImage: child.val().userImage,
-          ingredients: child.val().ingredients,
-          image: child.val().image,
-          steps: child.val().steps,
-          uid: child.val().uid,
-          numberOfLikes: child.val().numberOfLikes,
-          _key: child.key
-        });
+          list.push({
+            name: child.val().name,
+            userName: child.val().userName,
+            userImage: child.val().userImage,
+            ingredients: child.val().ingredients,
+            image: child.val().image,
+            steps: child.val().steps,
+            uid: child.val().uid,
+            numberOfLikes: child.val().numberOfLikes,
+            _key: child.key
+          });
+        })
+        // let arrayOfKeys = Object.keys(snapshot.val())
+        // console.log(arrayOfKeys)
+        // arrayOfKeys.sort()
+        // arrayOfKeys.reverse();
+        // console.log(arrayOfKeys)
+        // let results = arrayOfKeys.map((key) => console.log(snapshot.val()[key]));
+        // let referenceToOldestKey = arrayOfKeys[arrayOfKeys.length-1];
+        // console.log(referenceToOldestKey)
+        list.reverse()
+        this.setState({ cocktailList: list,
+                         loading: false,
+                       })
+        // this.addRecords(0)
       })
+    // }
 
-      this.setState({ cocktailList: list })
-    });
-  }
-
-  getProfiles = (uid) => {
-    console.log(uid)
   }
 
 
-_keyExtractor = item => (item.index || item.image)
+
+
+
+_keyExtractor = item => (item.index || item._key)
 
 renderCocktail(item){
     this.props.navigation.navigate('renderCocktail', {cocktail: item } )
@@ -229,12 +267,11 @@ renderCocktail(item){
 
       return (
       <View
-       style={{flexDirection: 'row', marginTop: 10,  justifyContent: 'space-around'}}
+       style={{flexDirection: 'row', marginTop: 10,  justifyContent: 'space-around', marginTop: 5}}
       >
-        <Animated.View
-         style={{flexDirection: 'row'}}
-        >
+
          <Animated.View
+         style={{flexDirection: 'row', marginTop: 10}}
          >
            <Icon
             name='plus-square'
@@ -243,7 +280,6 @@ renderCocktail(item){
             onPress={this.renderPlus.bind(this, item)}
            />
          </Animated.View>
-        </Animated.View>
 
          <View
          style={{ marginTop: 10, flexDirection: 'row'}}
@@ -262,12 +298,24 @@ renderCocktail(item){
     }
   }
 
-  _renderItem({item, index}) {
+  renderHeader(){
+    return (
+    <SearchBar
+    ref={(ref) => this.searchBar = ref}
+    />
+    )
+  }
 
+  onScrollHandler = () => {
+    // this.setState({
+    //   page: this.state.page + 1,
+    // })
+  }
+
+  _renderItem({item, index}) {
     return (
        <Card
         containerStyle={{ borderRadius: 10, marginBottom: 8 }}
-        title={item.name.toUpperCase()}
         key={index}
         titleStyle={{
           fontWeight: 'bold',
@@ -283,6 +331,13 @@ renderCocktail(item){
             style={{ width: 300, height: 200, borderRadius: 10 }}
             />
            </View>
+        <View
+         style={{ alignItems: 'center', justifyContent: 'center', marginTop: 8}}
+        >
+          <Text
+           style={{ fontSize: 15, fontWeight: '500', letterSpacing: 2 }}
+          >{item.name.toUpperCase()}</Text>
+        </View>
          <View
           style={{ marginTop: 10}}
          >
@@ -317,7 +372,55 @@ renderCocktail(item){
     )
   }
 
+  renderFooter = () => {
+  const { loading } = this.state
+  if (!this.state.loading) return null;
+    return (
+      <View
+        style={{
+          paddingVertical: 20,
+          borderTopWidth: 1,
+          borderColor: "#CED0CE"
+        }}
+      >
+        <ActivityIndicator animating size="large" />
+      </View>
+    )
+  }
+
+  handleRefresh = () =>{
+    // console.log('refershing')
+    console.log('in refershing')
+    this.setState({
+      refreshing: true,
+    }, () => {
+      this.Lister()
+    })
+  }
+
+
+  handleLoadMore = () => {
+    const {cocktailList, page } = this.state
+    // console.log(cocktailList.length)
+    // console.log(this.state.page)
+
+    // if(this.state.page != this.state.cocktailList.length){
+    // if(page)
+      this.setState(
+        {
+          page: this.state.page + 1
+        },
+        () => {
+          this.Lister();
+        }
+      );
+    // }
+  }
+
+
   render(){
+    // console.log(this.state.page)
+    // console.log(this.state.cocktailList.length,'cocktailList')
     const { navigate } = this.props.navigation;
     return(
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'gray'}}>

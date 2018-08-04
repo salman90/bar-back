@@ -44,20 +44,20 @@ class CockatailForm extends Component {
 
   }
 
-  static navigationOptions = props => {
-  const { navigation } = props;
-  const { navigate } = navigation;
-  console.log(navigation)
-  return {
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    tabBarVisible: false,
-    zIndex: 100,
-    top: 0,
-    left: 0,
-    right: 0
-  }
-}
+//   static navigationOptions = props => {
+//   const { navigation } = props;
+//   const { navigate } = navigation;
+//   console.log(navigation)
+//   return {
+//     backgroundColor: 'transparent',
+//     position: 'absolute',
+//     tabBarVisible: false,
+//     zIndex: 100,
+//     top: 0,
+//     left: 0,
+//     right: 0
+//   }
+// }
   componentWillMount() {
     const { data, dataForSteps } = this.state
     const name = {
@@ -130,6 +130,7 @@ class CockatailForm extends Component {
        image: image,
        userName: userName,
        userImage: userImage,
+       numberOfLikes: 0,
      }, (error) =>{
        if(error){
          alert("Data could not be saved" + error)
@@ -145,7 +146,7 @@ class CockatailForm extends Component {
        image: image,
        userName: userName,
        userImage: userImage,
-
+       numberOfLikes: 0,
      })
      this.setState({ loading: false,
                     image:  'https://firebasestorage.googleapis.com/v0/b/bar-back-c3947.appspot.com/o/images%2Fdefault.jpg?alt=media&token=2c51fbb0-9f67-41ed-9110-ccb778065394',

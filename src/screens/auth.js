@@ -10,8 +10,6 @@ class Auth extends Component {
   componentWillMount(){
     firebase.auth().onAuthStateChanged(userAuth => {
       if(userAuth){
-        // this.setState({ loggedIn: true})
-        // console.log(userAuth)
         this.props.navigation.navigate('profile')
       }
     })
@@ -30,7 +28,7 @@ class Auth extends Component {
     this.setState({ password: text })
   }
 
-  signInUser = () => {
+   signInUser = async () => {
     this.setState({ loading: true })
     const { email, password } = this.state
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -41,10 +39,9 @@ class Auth extends Component {
      .catch(() => {
        firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
-          // console.log(user.uid, 'in create user function')
           this.setState({error: '' ,loading: false})
-          this.createUserInDatabase(email, password)
           this.props.navigation.navigate('cocktailList')
+          this.createUserInDatabase(email, password)
         })
         .catch((error) => {
           this.setState({error: '' ,loading: false})
@@ -65,15 +62,12 @@ class Auth extends Component {
       lastName: '',
       age: '',
       gender: '',
-      profileImage:'https://firebasestorage.googleapis.com/v0/b/bar-back-c3947.appspot.com/o/images%2Fdefault.jpg?alt=media&token=1bddeb53-562a-41ff-a201-909930c27b31',
+      profileImage:'https://firebasestorage.googleapis.com/v0/b/bar-back-c3947.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=71909f25-454a-4f80-b38e-74cd56320e30',
       email: email,
 
     }
     const user = firebase.auth().currentUser;
-    // console.log(user)
-    // console.log(user.uid, 'in firebase database function')
     const userUid = user.uid
-     // firebase.auth().currentUser
     firebase.database().ref('users').child(userUid).update({
       ...defaults
     })
