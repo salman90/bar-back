@@ -6,7 +6,6 @@ import Profile from './screens/profile';
 import CockatailForm from './screens/cockatailForm';
 import Auth from './screens/auth';
 import CocktailDetail from './screens/cocktailDetail';
-import UserCocktailDetail from './screens/userCocktailDetail';
 import PorfileUser from './screens/profileUser';
 import UserPersonalList from './screens/userpersonallist'
 import {
@@ -43,22 +42,22 @@ class App extends React.Component {
           },
           userCockatil:{
             screen: createStackNavigator({
-              usercocktail: {screen: UserCocktail},
-              cockatailForm: {screen: CockatailForm, navigationOptions: { tabBarVisible: false }},
-              userCocktailDetail: { screen: UserCocktailDetail }
+              usercocktail:   { screen: UserCocktail },
+              cockatailForm:  { screen: CockatailForm },
+              cockatailForm:  { screen: CockatailForm, navigationOptions: { tabBarVisible: false }},
             })
           },
           cocktailList:   {
             screen: createStackNavigator({
-              cocktailList: {screen: CoctailList },
-              renderCocktail: { screen: CocktailDetail},
-              userProfile: {screen: PorfileUser }
+              cocktailList:   { screen: CoctailList },
+              renderCocktail: { screen: CocktailDetail },
+              userProfile:    { screen: PorfileUser }
             })
           },
         }, {
           tabBarOptions: {
             showLabel: true,
-			      showIcon: true,
+            showIcon: true,
             activeTintColor: '#d074dc',
             inactiveTintColor: '#000',
           },
@@ -70,15 +69,15 @@ class App extends React.Component {
       lazy: true,
       swipeEnabled: false,
       navigationOptions: {
-          tabBarVisible: false
+        tabBarVisible: false
       },
     },
   )
-    return (
-      <MainNavigation />
-    );
+  return (
+    <MainNavigation />
+  );
 
-  }
+}
 }
 
 const styles = StyleSheet.create({
