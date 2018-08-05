@@ -18,6 +18,7 @@ class UserPersonalList extends Component {
   componentWillMount() {
     const navParams = this.props.navigation.state.params.user;
     const userUid = navParams.uid
+    console.log(userUid)
     firebase.database().ref('user_cocktails').child(userUid).on('value', snap => {
       const list = []
       snap.forEach((child) => {

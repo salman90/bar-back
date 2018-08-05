@@ -6,7 +6,6 @@ import Profile from './screens/profile';
 import CockatailForm from './screens/cockatailForm';
 import Auth from './screens/auth';
 import CocktailDetail from './screens/cocktailDetail';
-import UserCocktailDetail from './screens/userCocktailDetail';
 import PorfileUser from './screens/profileUser';
 import UserPersonalList from './screens/userpersonallist'
 import {
@@ -133,15 +132,14 @@ class App extends React.Component {
       lazy: true,
       swipeEnabled: false,
       navigationOptions: {
-          tabBarVisible: false
+        tabBarVisible: false
       },
     },
   )
     return (
       <TabNavigation />
     );
-
-  }
+}
 }
 
 const styles = StyleSheet.create({
