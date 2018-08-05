@@ -14,6 +14,7 @@ import {
  } from 'react-navigation';
 
 import * as firebase from "firebase";
+import { Icon } from 'react-native-elements'
 
 class App extends React.Component {
 
@@ -30,38 +31,100 @@ class App extends React.Component {
   }
 
   render() {
-    const MainNavigation = createBottomTabNavigator({
-      auth: {screen: Auth },
-      main: {
-        screen: createBottomTabNavigator({
-          profile: {
-            screen: createStackNavigator({
-              profile: {screen: Profile },
-              userPersonalList: {screen: UserPersonalList},
-            })
-          },
-          userCockatil:{
-            screen: createStackNavigator({
-              usercocktail:   { screen: UserCocktail },
-              cockatailForm:  { screen: CockatailForm },
-              cockatailForm:  { screen: CockatailForm, navigationOptions: { tabBarVisible: false }},
-            })
-          },
-          cocktailList:   {
-            screen: createStackNavigator({
-              cocktailList:   { screen: CoctailList },
-              renderCocktail: { screen: CocktailDetail },
-              userProfile:    { screen: PorfileUser }
-            })
-          },
-        }, {
-          tabBarOptions: {
-            showLabel: true,
-            showIcon: true,
-            activeTintColor: '#d074dc',
-            inactiveTintColor: '#000',
+    const profileStack = createStackNavigator({
+      profile: {screen: Profile },
+      userPersonalList: {screen: UserPersonalList},
+      cockatailForm: {screen: CockatailForm},
+    }, {
+      navigationOptions: ({ }) => ({
+        title: `BarBack`,
+      })
+    })
+
+    const cocktailListStackNav = createStackNavigator({
+      cocktailList: {
+        screen: CoctailList,
+        navigationOptions: ({navigation}) => ({
+          cardStyle: {
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          } ,
+          title: `BarBack`,
+
+          headerTitleStyle: {
+            color: '#000',
+            fontSize: 20,
+            letterSpacing: 1,
           },
         })
+      },
+      renderCocktail: { screen: CocktailDetail},
+      userProfile: {screen: PorfileUser }
+    })
+
+    const mainTabNav = createBottomTabNavigator({
+      profile: {
+        screen: profileStack
+      },
+      cocktailList:   {
+        screen: cocktailListStackNav
+      },
+    }, {
+      navigationOptions: ({ navigation }) => ({
+        tabBarOptions: {
+          showLabel: false,
+        },
+        title: {
+          tabBarLabel: null
+        },
+        tabBarIcon: ({ focused, tintColor }) => {
+          const { routeName } = navigation.state;
+          if(routeName === 'profile'){
+
+            if(focused){
+
+              return (
+                <Icon
+                 name='user-circle'
+                 size={25}
+                type='font-awesome'
+                color='#800080'
+                />
+              )
+            }
+            return(
+              <Icon
+               name='user-circle'
+               size={25}
+              type='font-awesome'
+              />
+            )
+          }else if(routeName === 'cocktailList'){
+            if(focused){
+              return(
+                <Icon
+                name='martini'
+                size={20}
+                type='material-community'
+                color='#800080'
+                />
+              )
+            }
+            return (
+              <Icon
+               name='martini'
+               size={20}
+               type='material-community'
+              />
+            )
+          }
+        },
+      })
+    })
+
+    const TabNavigation = createBottomTabNavigator({
+      auth: {screen: Auth },
+      main: {
+        screen: mainTabNav
       }
 
     },
@@ -73,10 +136,9 @@ class App extends React.Component {
       },
     },
   )
-  return (
-    <MainNavigation />
-  );
-
+    return (
+      <TabNavigation />
+    );
 }
 }
 

@@ -12,6 +12,9 @@ TouchableWithoutFeedback} from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 import firebase from 'firebase';
 import { Avatar, Button, Icon } from 'react-native-elements';
+import { Image } from 'react-native-expo-image-cache';
+import { FileSystem } from 'expo';
+
 // import { createBottomTabNavigator } from 'react-navigation';
 
 const {height, width} = Dimensions.get('window');
@@ -23,6 +26,7 @@ class Profile extends Component {
     isVisible: false,
     title: '',
     description: '',
+    localUri: '',
   }
 
   componentWillMount() {
@@ -76,6 +80,9 @@ class Profile extends Component {
     // console.log(result)
     if(!result.cancelled) {
       let localUri = result.uri
+      this.setState({ localUri: localUri })
+
+      // console.log(this.state.localUri)
       // let filename = localUri.split('/').pop();
       // let match = /\.(\w+)$/.exec(result.uri.split('/').pop());
       // let type = match ? `image/${match[1]}` : `image`;
@@ -87,9 +94,11 @@ class Profile extends Component {
   UploadImageToStorage = async (uri, userUid) => {
     // const user = firebase.auth().currentUser
     // const userUid = user.uid
+    // console.log(uri)
 
     const respones = await fetch(uri)
     const blob = await respones.blob()
+    console.log(blob)
     let uriParts = uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
     let metadata = {
@@ -116,14 +125,7 @@ class Profile extends Component {
     console.log('Upload Coctail Image you bitch')
   }
 
-  createCocktail(){
-    // const {user, title, description, } =  this.state
-    // firebase.database().ref('cocktail_list').push({
-    //   name: title,
-    //   description: description,
-    //   user: user
-    // })
-  }
+
 
   SignOut = (callback) => {
     firebase.auth().signOut()
@@ -131,11 +133,13 @@ class Profile extends Component {
   }
 
   logOut(){
-    console.log('in log out')
     this.SignOut(() => {
-      console.log('in call back')
       this.props.navigation.navigate('auth')
     })
+  }
+
+  createCocktail() {
+    this.props.navigation.navigate('cockatailForm')
   }
 
 
@@ -148,6 +152,7 @@ class Profile extends Component {
     <View
      style={styles.mainContainer}
     >
+
        <ScrollView
         contentContainerStyle={styles.scrollViewStyle}
        >
@@ -155,7 +160,7 @@ class Profile extends Component {
          style={styles.elementsViewStyle}
          >
            <View
-            style={{ flexDirection: 'column', marginBottom: 10}}
+            style={{ flexDirection: 'column', marginBottom: 10, flex:1 }}
            >
              <Avatar
               width={200}
@@ -207,6 +212,11 @@ class Profile extends Component {
            onPress={this.logOut.bind(this)}
            />
           </View>
+          <Button
+           title='create a cocktail'
+           buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998', marginTop: 10}}
+           onPress={this.createCocktail.bind(this)}
+          />
         </View>
        </ScrollView>
     </View>
