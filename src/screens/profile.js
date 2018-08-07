@@ -12,8 +12,9 @@ TouchableWithoutFeedback} from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 import firebase from 'firebase';
 import { Avatar, Button, Icon } from 'react-native-elements';
-import { Image } from 'react-native-expo-image-cache';
+import { Image, CacheManager } from 'react-native-expo-image-cache';
 import { FileSystem } from 'expo';
+import CacheImage from '../components/chacheImage'
 
 // import { createBottomTabNavigator } from 'react-navigation';
 
@@ -80,13 +81,9 @@ class Profile extends Component {
     // console.log(result)
     if(!result.cancelled) {
       let localUri = result.uri
-      this.setState({ localUri: localUri })
-
-      // console.log(this.state.localUri)
-      // let filename = localUri.split('/').pop();
-      // let match = /\.(\w+)$/.exec(result.uri.split('/').pop());
-      // let type = match ? `image/${match[1]}` : `image`;
+      this.setState({ localUri: localUri });
       let image =  await this.UploadImageToStorage(localUri, userUid)
+      const path = await CacheManager.get(image).getPath();
       firebase.database().ref('users').child(userUid).update({ profileImage: image })
     }
   }
@@ -98,7 +95,6 @@ class Profile extends Component {
 
     const respones = await fetch(uri)
     const blob = await respones.blob()
-    console.log(blob)
     let uriParts = uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
     let metadata = {
@@ -144,9 +140,20 @@ class Profile extends Component {
 
 
   render(){
+    // console.log(this.props.)
     const {user, userInfo} = this.state
+    // console.log(this.state.user)
     if(!this.state.user) {
-      return <Text>Loading</Text>
+      return(
+        <View
+         style={{alignItems: 'center', justifyContent: 'center', flex: 1}}
+        >
+          <ActivityIndicator
+           size='large'
+           color="#0000ff"
+          />
+        </View>
+      )
     }
     return(
     <View
@@ -159,10 +166,13 @@ class Profile extends Component {
          <View
          style={styles.elementsViewStyle}
          >
+         <TouchableWithoutFeedback
+          onPress={this.uploadImage}
+         >
            <View
             style={{ flexDirection: 'column', marginBottom: 10, flex:1 }}
            >
-             <Avatar
+           <Avatar
               width={200}
               rounded
               size="xlarge"
@@ -170,6 +180,7 @@ class Profile extends Component {
               source={{uri: this.state.user.profileImage}}
              />
            </View>
+        </TouchableWithoutFeedback>
            <View
             style={{ flexDirection: 'column', marginBottom: 10}}
            >
@@ -197,27 +208,24 @@ class Profile extends Component {
             />
           </View>
           <View>
-            <Button
-              title='View  List'
-              buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
-              onPress={() => this.props.navigation.navigate('userPersonalList', {user: this.state.userInfo})}
-            />
-          </View>
-          <View
-           style={{ marginTop: 10 }}
-          >
-           <Button
-           title='logout'
-           buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
-           onPress={this.logOut.bind(this)}
-           />
-          </View>
           <Button
            title='create a cocktail'
-           buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998', marginTop: 10}}
+           buttonStyle={{ marginTop: 8, borderRadius: 10 , backgroundColor: '#3B5998', marginTop: 8, width: 200}}
            onPress={this.createCocktail.bind(this)}
           />
-        </View>
+            <Button
+              title='View  List'
+              buttonStyle={{ marginTop: 8, borderRadius: 10 , backgroundColor: '#3B5998', width: 200, marginTop: 8}}
+              onPress={() => this.props.navigation.navigate('userPersonalList', {user: this.state.userInfo})}
+            />
+
+           <Button
+           title='logout'
+           buttonStyle={{ marginTop: 8, borderRadius: 10 , backgroundColor: '#3B5998', width: 200}}
+           onPress={this.logOut.bind(this)}
+           />
+           </View>
+          </View>
        </ScrollView>
     </View>
     )
@@ -226,7 +234,7 @@ class Profile extends Component {
 
 const styles = {
   mainContainer: {
-    flex:1
+    flex:1,
   },
    scrollViewStyle: {
      flexGrow : 1,
@@ -240,7 +248,12 @@ const styles = {
       width: width * 0.75,
      borderBottomWidth: 2,
      borderColor: 'gray',
-   }
+   },
+   image: {
+    height: 200,
+    width: 200,
+    borderRadius: 8,
+  },
 }
 
 export default Profile;

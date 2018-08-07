@@ -10,6 +10,7 @@ import  {
 } from 'react-native';
 import * as firebase from 'firebase';
 import { createStackNavigator } from 'react-navigation';
+import CacheImage from '../components/chacheImage';
 
 
 
@@ -17,21 +18,6 @@ const {height, width} = Dimensions.get('window');
 
 
 class CocktailDetail extends Component {
-  
-//   static navigationOptions = props => {
-//   const { navigation } = props;
-//   const { navigate } = navigation;
-//   return {
-//     tabBarVisible: false,
-//     tabBarIcon: ({ tintColor }) =>(
-//       <Icon
-//         name='user-circle'
-//         type='font-awesome'
-//         size={20}
-//       />
-//     ),
-//   }
-// }
 
   constructor(props) {
     super(props);
@@ -42,6 +28,8 @@ class CocktailDetail extends Component {
   }
 
 
+
+
   async componentDidMount(){
     const navParams = this.props.navigation.state.params.cocktail;
     const cocktailUser = await this.getUserInfo()
@@ -50,6 +38,7 @@ class CocktailDetail extends Component {
 
   getUserInfo = () => {
     const cocktail = this.props.navigation.state.params.cocktail;
+    console.log(cocktail)
     const userUid = cocktail.uid
     return firebase.database().ref('users').child(userUid).once('value', snap => {
       snap.val()
@@ -65,15 +54,25 @@ class CocktailDetail extends Component {
     if(cocktail === null || cocktailUser === null ){
       return (
         <View
-        style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}
+        style={{
+          flex: 1,
+           alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#3B5998'}}
         >
-        <Text>Loading ....</Text>
+        <Text>BarBack</Text>
         </View>
       )
     }else{
 
       return (
-        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, padding: 20, marginBottom: 5 }}>
+        <View
+        style={{
+          alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1, padding: 20,
+        backgroundColor: 'teal' }}
+        >
         <View
         style={{width: width * 0.90, backgroundColor: '#fff', borderRadius: 8}}
         >
@@ -88,8 +87,8 @@ class CocktailDetail extends Component {
         <View
         style={{ alignItems: 'center', justifyContent: 'center' }}
         >
-        <Image
-        source={{ uri: cocktail.image}}
+        <CacheImage
+        uri={cocktail.image}
         style={{  width: width * 0.75, height: 200, borderRadius: 8}}
         />
         </View>
@@ -123,8 +122,8 @@ class CocktailDetail extends Component {
         >
         <TouchableHighlight
         onPress={() => this.props.navigation.navigate('userProfile', {userUid: cocktail.uid})}>
-        <Image
-        source={{ uri: cocktailUser.profileImage}}
+        <CacheImage
+        uri={  cocktailUser.profileImage}
         style={{  width: 50, height: 50, marginBottom: 5, borderRadius: 50/2}}
         />
         </TouchableHighlight>
