@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import shorthash from 'shorthash';
 import SHA1 from "crypto-js/sha1";
 import { FileSystem } from 'expo';
-import md5 from 'js-md5';
+//import md5 from 'js-md5';
 import _ from 'lodash'
 
 const BASE_DIR = `${FileSystem.cacheDirectory}expo-image-cache/`;
