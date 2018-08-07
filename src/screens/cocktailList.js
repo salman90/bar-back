@@ -18,6 +18,7 @@ import SearchBar from 'react-native-searchbar';
 import fontAwesome from 'react-native-vector-icons';
 import { createStackNavigator } from 'react-navigation';
 import { Card, Button, Icon } from 'react-native-elements';
+import CacheImage from '../components/chacheImage';
 // import type { StyleObj as Style } from "react-native/Libraries/StyleSheet/StyleSheetTypes";
 import _ from 'lodash';
 
@@ -50,7 +51,6 @@ class CoctailList extends Component {
 //   const { navigation } = props;
 //   const { navigate } = navigation;
 //   return {
-//     title: 'BarbBack',
 //     titleStyle: {
 //        color: '#fff'
 //      },
@@ -97,14 +97,7 @@ class CoctailList extends Component {
             _key: child.key
           });
         })
-        // let arrayOfKeys = Object.keys(snapshot.val())
-        // console.log(arrayOfKeys)
-        // arrayOfKeys.sort()
-        // arrayOfKeys.reverse();
-        // console.log(arrayOfKeys)
-        // let results = arrayOfKeys.map((key) => console.log(snapshot.val()[key]));
-        // let referenceToOldestKey = arrayOfKeys[arrayOfKeys.length-1];
-        // console.log(referenceToOldestKey)
+
         list.reverse()
         this.setState({ cocktailList: list,
                          loading: false,
@@ -312,81 +305,82 @@ renderCocktail(item){
     // })
   }
 
-  _renderItem({item, index}) {
-    return (
-       <Card
-        containerStyle={{ borderRadius: 10, marginBottom: 8 }}
-        key={index}
-        titleStyle={{
-          fontWeight: 'bold',
-              letterSpacing: 2,
-            }}
-       >
-
-           <View
-            style={[styles.imageContainer]}
-           >
-            <Image
-            source={{uri: item.image}}
-            style={{ width: 300, height: 200, borderRadius: 10 }}
-            />
-           </View>
-        <View
-         style={{ alignItems: 'center', justifyContent: 'center', marginTop: 8}}
-        >
-          <Text
-           style={{ fontSize: 15, fontWeight: '500', letterSpacing: 2 }}
-          >{item.name.toUpperCase()}</Text>
-        </View>
-         <View
-          style={{ marginTop: 10}}
-         >
-           <Button
-              title='View Details'
-              onPress={this.renderCocktail.bind(this, item)}
-              buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
-           />
-         </View>
-           {this.renderIcons(item)}
-           <View
-             style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10}}
-           >
-           <TouchableHighlight
-            onPress={() => this.props.navigation.navigate('userProfile', {userUid: item.uid})}
-           >
-             <View>
-              <Image
-               source={{ uri: item.userImage }}
-               style={{ width: 50, height: 50, borderRadius: 50/2 }}
-              />
-             </View>
-            </TouchableHighlight>
-             <View
-             >
-             <Text
-             style={{ fontSize: 15, fontWeight: 'bold'}}
-             >{item.userName}</Text>
-             </View>
-           </View>
-       </Card>
-    )
-  }
-
-  renderFooter = () => {
-  const { loading } = this.state
-  if (!this.state.loading) return null;
-    return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: "#CED0CE"
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
-    )
-  }
+  // _renderItem({item, index}) {
+  //   // console.log(item.userImage, item.name, item)
+  //   return (
+  //      <Card
+  //       containerStyle={{ borderRadius: 10, marginBottom: 8 }}
+  //       key={index}
+  //       titleStyle={{
+  //         fontWeight: 'bold',
+  //             letterSpacing: 2,
+  //           }}
+  //      >
+  //
+  //          <View
+  //           style={[styles.imageContainer]}
+  //          >
+  //           <CacheImage
+  //           uri={item.image}
+  //           style={{ width: 300, height: 200, borderRadius: 10 }}
+  //           />
+  //          </View>
+  //       <View
+  //        style={{ alignItems: 'center', justifyContent: 'center', marginTop: 8}}
+  //       >
+  //         <Text
+  //          style={{ fontSize: 15, fontWeight: '500', letterSpacing: 2 }}
+  //         >{item.name.toUpperCase()}</Text>
+  //       </View>
+  //        <View
+  //         style={{ marginTop: 10}}
+  //        >
+  //          <Button
+  //             title='View Details'
+  //             onPress={this.renderCocktail.bind(this, item)}
+  //             buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+  //          />
+  //        </View>
+  //          {this.renderIcons(item)}
+  //          <View
+  //            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10}}
+  //          >
+  //          <TouchableHighlight
+  //           onPress={() => this.props.navigation.navigate('userProfile', {userUid: item.uid})}
+  //          >
+  //            <View>
+  //             <CacheImage
+  //              uri={item.userImage}
+  //              style={{ width: 50, height: 50, borderRadius: 50/2 }}
+  //             />
+  //            </View>
+  //           </TouchableHighlight>
+  //            <View
+  //            >
+  //            <Text
+  //            style={{ fontSize: 15, fontWeight: 'bold'}}
+  //            >{item.userName}</Text>
+  //            </View>
+  //          </View>
+  //      </Card>
+  //   )
+  // }
+  //
+  // renderFooter = () => {
+  // const { loading } = this.state
+  // if (!this.state.loading) return null;
+  //   return (
+  //     <View
+  //       style={{
+  //         paddingVertical: 20,
+  //         borderTopWidth: 1,
+  //         borderColor: "#CED0CE"
+  //       }}
+  //     >
+  //       <ActivityIndicator animating size="large" />
+  //     </View>
+  //   )
+  // }
 
   handleRefresh = () =>{
     // console.log('refershing')
@@ -423,10 +417,66 @@ renderCocktail(item){
     // console.log(this.state.cocktailList.length,'cocktailList')
     const { navigate } = this.props.navigation;
     return(
-      <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'gray'}}>
+      <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'teal'}}>
          <FlatList
             data={this.state.cocktailList}
-            renderItem={this._renderItem.bind(this)}
+            renderItem={({item}) => (
+              <Card
+               containerStyle={{ borderRadius: 10, marginBottom: 8 }}
+               key={item.uid}
+               titleStyle={{
+                 fontWeight: 'bold',
+                     letterSpacing: 2,
+                   }}
+              >
+
+                  <View
+                   style={[styles.imageContainer]}
+                  >
+                   <CacheImage
+                   uri={item.image}
+                   style={{ width: 300, height: 200, borderRadius: 10 }}
+                   />
+                  </View>
+               <View
+                style={{ alignItems: 'center', justifyContent: 'center', marginTop: 8}}
+               >
+                 <Text
+                  style={{ fontSize: 15, fontWeight: '500', letterSpacing: 2 }}
+                 >{item.name.toUpperCase()}</Text>
+               </View>
+                <View
+                 style={{ marginTop: 10}}
+                >
+                  <Button
+                     title='View Details'
+                     onPress={this.renderCocktail.bind(this, item)}
+                     buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+                  />
+                </View>
+                  {this.renderIcons(item)}
+                  <View
+                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10}}
+                  >
+                  <TouchableHighlight
+                   onPress={() => this.props.navigation.navigate('userProfile', {userUid: item.uid})}
+                  >
+                    <View>
+                     <CacheImage
+                      uri={item.userImage}
+                      style={{ width: 50, height: 50, borderRadius: 50/2 }}
+                     />
+                    </View>
+                   </TouchableHighlight>
+                    <View
+                    >
+                    <Text
+                    style={{ fontSize: 15, fontWeight: 'bold'}}
+                    >{item.userName}</Text>
+                    </View>
+                  </View>
+              </Card>
+            )}
             keyExtractor={this._keyExtractor}
          />
       </View>

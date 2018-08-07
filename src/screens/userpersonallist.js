@@ -9,6 +9,7 @@ import {
   Alert  } from 'react-native';
 import firebase from 'firebase';
 import { Card, Button, Icon } from 'react-native-elements';
+import CacheImage from '../components/chacheImage';
 
 
 class UserPersonalList extends Component {
@@ -142,11 +143,75 @@ class UserPersonalList extends Component {
        }else {
         return (
           <View
-           style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}
+           style={{
+             flex: 1,
+             alignItems: 'center',
+             justifyContent: 'center',
+             backgroundColor: 'teal'
+           }}
           >
            <FlatList
            data={this.state.cocktailList}
-           renderItem={this._renderItem.bind(this)}
+           renderItem={({item}) => (
+             <Card
+             containerStyle={{ borderRadius: 10, marginBottom: 8 }}
+             title={item.name.toUpperCase()}
+             key={item.uid}
+             titleStyle={{
+               fontWeight: 'bold',
+                   letterSpacing: 2,
+                 }}
+             >
+               <View
+                style={[styles.imageContainer]}
+               >
+                 <CacheImage
+                  uri={item.image}
+                 style={{ width: 300, height: 200, borderRadius: 10 }}
+                 />
+               </View>
+               <View
+                style={{ marginTop: 10}}
+               >
+                 <Button
+                    title='View Details'
+                    onPress={this.renderCocktail.bind(this, item)}
+                    buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
+                 />
+               </View>
+               <View
+                style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10}}
+               >
+                 <Icon
+                  type='font-awesome'
+                  name='times-circle'
+                  size={25}
+                  onPress={this.renderRemoveFromList.bind(this, item)}
+                 />
+               </View>
+               <View
+                 style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10}}
+               >
+                 <TouchableHighlight
+                  onPress={() => this.props.navigation.navigate('userProfile', {userUid: item.uid})}
+                 >
+                   <View>
+                     <CacheImage
+                       uri={item.userImage }
+                      style={{ width: 50, height: 50, borderRadius: 50/2 }}
+                     />
+                   </View>
+                 </TouchableHighlight>
+                   <View
+                   >
+                   <Text
+                   style={{ fontSize: 15, fontWeight: 'bold'}}
+                   >{item.userName}</Text>
+                   </View>
+               </View>
+             </Card>
+
+           )}
            keyExtractor={this._keyExtractor}
            />
           </View>

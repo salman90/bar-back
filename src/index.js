@@ -36,8 +36,16 @@ class App extends React.Component {
       userPersonalList: {screen: UserPersonalList},
       cockatailForm: {screen: CockatailForm},
     }, {
-      navigationOptions: ({ }) => ({
+      navigationOptions: ({ navigation }) => ({
         title: `BarBack`,
+        headerStyle: {
+         backgroundColor: '#fff'
+       },
+       headerTitleStyle: {
+         color: '#000',
+         fontSize: 20,
+         letterSpacing: 1,
+       },
       })
     })
 
@@ -45,9 +53,9 @@ class App extends React.Component {
       cocktailList: {
         screen: CoctailList,
         navigationOptions: ({navigation}) => ({
-          cardStyle: {
-            backgroundColor: 'rgba(0,0,0,0.5)',
-          } ,
+          headerStyle: {
+           backgroundColor: '#fff'
+         },
           title: `BarBack`,
 
           headerTitleStyle: {
