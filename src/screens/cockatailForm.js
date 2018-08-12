@@ -14,13 +14,15 @@ import {
 import { ImagePicker, Permissions } from 'expo';
 import { Button, Icon, Avatar } from 'react-native-elements'
 import firebase from 'firebase'
-
-
-
 const {height, width} = Dimensions.get('window');
 
-
 class CockatailForm extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerLeft: (<Icon type='font-awesome' name='arrow-circle-left'
+    containerStyle={{ paddingLeft: 15 }} color='#000' onPress={() => navigation.goBack()} />),
+    }
+  }
   state = {
     name: '',
     user: null,
@@ -44,21 +46,7 @@ class CockatailForm extends Component {
 
   }
 
-//   static navigationOptions = props => {
-//   const { navigation } = props;
-//   const { navigate } = navigation;
-//   console.log(navigation)
-//   return {
-//     backgroundColor: 'transparent',
-//     position: 'absolute',
-//     tabBarVisible: false,
-//     zIndex: 100,
-//     top: 0,
-//     left: 0,
-//     right: 0
-//   }
-// }
-  componentWillMount() {
+  componentDidMount() {
     const { data, dataForSteps } = this.state
     const name = {
       name: 'mahmoud'
@@ -66,7 +54,6 @@ class CockatailForm extends Component {
     data.push(name)
     dataForSteps.push(name)
     const user = firebase.auth().currentUser
-    // this.setState({ user: user})
     const userUid = user.uid
     this.setState({
       user: user,
@@ -95,10 +82,6 @@ class CockatailForm extends Component {
    UploadImageToStorage = async  (uri) => {
      const respones = await fetch(uri)
      const blob = await respones.blob()
-     // let fileType = uriParts[uriParts.length - 1];
-     // let metadata = {
-     // contentType: `image/${fileType}`,
-     // }
      const userUid = this.state.user.uid
 
      let ref =  firebase.storage().ref('images').child(userUid).child('cocktailImage')
@@ -108,7 +91,6 @@ class CockatailForm extends Component {
    }
 
    askPermissionsAsync = async () => {
-     // await Permissions.askAsync(Permissions.CAMERA);
      await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
    };
@@ -117,11 +99,8 @@ class CockatailForm extends Component {
      const { user, image, ingredients, steps, name, profileInfo } = this.state
      this.setState({ loading: true })
      const userUid = user.uid
-     // this.getCocktailCreator(userUid)
      const userName = `${profileInfo.firstName} ${profileInfo.lastName}`
      const userImage = `${profileInfo.profileImage}`
-     // console.log(userName)
-     // console.log(userImage)
      const saveDataToUserList = await firebase.database().ref('user_cocktails').child(userUid).push({
        name: name,
        ingredients: ingredients,

@@ -124,6 +124,7 @@ class Profile extends Component {
 
 
   SignOut = (callback) => {
+    console.log('in sign out')
     firebase.auth().signOut()
     callback()
   }

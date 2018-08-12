@@ -24,9 +24,9 @@ export default class CacheImage extends React.Component {
     // console.log(info)
     const {exists} = info;
     // console.log(info)
+
     if(exists){
-      // console.log('in exsits')
-      // console.log(path, 'path')
+
       this.setState({
       source: {
         uri: path
