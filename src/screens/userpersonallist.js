@@ -10,16 +10,24 @@ import {
 import firebase from 'firebase';
 import { Card, Button, Icon } from 'react-native-elements';
 import CacheImage from '../components/chacheImage';
+import ListItem from '../components/listItem';
 
 
 class UserPersonalList extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerLeft: (<Icon type='font-awesome' name='arrow-circle-left'
+    containerStyle={{ paddingLeft: 15 }} color='#000' onPress={() => navigation.goBack()} />),
+    }
+  }
+
   state = {
     cocktailList: null
   }
-  componentWillMount() {
+  componentDidMount() {
     const navParams = this.props.navigation.state.params.user;
     const userUid = navParams.uid
-    console.log(userUid)
+    // console.log(userUid)
     firebase.database().ref('user_cocktails').child(userUid).on('value', snap => {
       const list = []
       snap.forEach((child) => {
@@ -46,6 +54,7 @@ class UserPersonalList extends Component {
   }
 
   renderRemoveFromList(post){
+
     const navParams = this.props.navigation.state.params.user;
     const userUid = navParams.uid
     const postKey = post._key
@@ -66,70 +75,16 @@ class UserPersonalList extends Component {
     firebase.database().ref('user_cocktails').child(userUid).child(postKey).remove()
   }
 
-  _renderItem({item, index}) {
-    return (
-      <Card
-      containerStyle={{ borderRadius: 10, marginBottom: 8 }}
-      title={item.name.toUpperCase()}
-      key={index}
-      titleStyle={{
-        fontWeight: 'bold',
-            letterSpacing: 2,
-          }}
-      >
-        <View
-         style={[styles.imageContainer]}
-        >
-          <Image
-          source={{uri: item.image}}
-          style={{ width: 300, height: 200, borderRadius: 10 }}
-          />
-        </View>
-        <View
-         style={{ marginTop: 10}}
-        >
-          <Button
-             title='View Details'
-             onPress={this.renderCocktail.bind(this, item)}
-             buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
-          />
-        </View>
-        <View
-         style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10}}
-        >
-          <Icon
-           type='font-awesome'
-           name='times-circle'
-           size={25}
-           onPress={this.renderRemoveFromList.bind(this, item)}
-          />
-        </View>
-        <View
-          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10}}
-        >
-          <TouchableHighlight
-           onPress={() => this.props.navigation.navigate('userProfile', {userUid: item.uid})}
-          >
-            <View>
-              <Image
-               source={{ uri: item.userImage }}
-               style={{ width: 50, height: 50, borderRadius: 50/2 }}
-              />
-            </View>
-          </TouchableHighlight>
-            <View
-            >
-            <Text
-            style={{ fontSize: 15, fontWeight: 'bold'}}
-            >{item.userName}</Text>
-            </View>
-        </View>
-      </Card>
-    )
-  }
+  _renderItem = ({item}) => (
+    <ListItem
+    item={item}
+    navigation={this.props.navigation}
+    pageName='userProfile'
+    cocktailPage='renderCocktail'
+    />
+  )
 
   render(){
-    // console.log(this.state.cocktailList)
        if(this.state.cocktailList === null){
          return(
            <View
@@ -152,67 +107,9 @@ class UserPersonalList extends Component {
           >
            <FlatList
            data={this.state.cocktailList}
-           renderItem={({item}) => (
-             <Card
-             containerStyle={{ borderRadius: 10, marginBottom: 8 }}
-             title={item.name.toUpperCase()}
-             key={item.uid}
-             titleStyle={{
-               fontWeight: 'bold',
-                   letterSpacing: 2,
-                 }}
-             >
-               <View
-                style={[styles.imageContainer]}
-               >
-                 <CacheImage
-                  uri={item.image}
-                 style={{ width: 300, height: 200, borderRadius: 10 }}
-                 />
-               </View>
-               <View
-                style={{ marginTop: 10}}
-               >
-                 <Button
-                    title='View Details'
-                    onPress={this.renderCocktail.bind(this, item)}
-                    buttonStyle={{ borderRadius: 10 , backgroundColor: '#3B5998'}}
-                 />
-               </View>
-               <View
-                style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10}}
-               >
-                 <Icon
-                  type='font-awesome'
-                  name='times-circle'
-                  size={25}
-                  onPress={this.renderRemoveFromList.bind(this, item)}
-                 />
-               </View>
-               <View
-                 style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10}}
-               >
-                 <TouchableHighlight
-                  onPress={() => this.props.navigation.navigate('userProfile', {userUid: item.uid})}
-                 >
-                   <View>
-                     <CacheImage
-                       uri={item.userImage }
-                      style={{ width: 50, height: 50, borderRadius: 50/2 }}
-                     />
-                   </View>
-                 </TouchableHighlight>
-                   <View
-                   >
-                   <Text
-                   style={{ fontSize: 15, fontWeight: 'bold'}}
-                   >{item.userName}</Text>
-                   </View>
-               </View>
-             </Card>
-
-           )}
+           renderItem={this._renderItem}
            keyExtractor={this._keyExtractor}
+           removeClippedSubviews={false}
            />
           </View>
         )
