@@ -16,24 +16,33 @@ export default class CacheImage extends React.Component {
 
   async componentDidMount() {
     const { uri } = this.props;
+    console.log(uri)
+    // console.log(typeof uri === 'undefined')
     const filename = uri.substring(uri.lastIndexOf("/"), uri.indexOf("?") === -1 ? uri.length : uri.indexOf("?"));
+    // console.log(filename)
     const ext = filename.indexOf(".") === -1 ? ".jpg" : filename.substring(filename.lastIndexOf("."));
     const path = `${BASE_DIR}${SHA1(uri)}${ext}`;
     const tmpPath = `${BASE_DIR}${SHA1(uri)}-${_.uniqueId()}${ext}`;
+
+    try {
+       await FileSystem.makeDirectoryAsync(BASE_DIR);
+     } catch (e) {
+     }
     const info = await FileSystem.getInfoAsync(path);
-    // console.log(info)
+
     const {exists} = info;
     // console.log(info)
+
     if(exists){
-      // console.log('in exsits')
-      // console.log(path, 'path')
+      // console.log('exists')
       this.setState({
       source: {
         uri: path
       }})
       return
     }
-    console.log('download image')
+    // console.log('download image')
+
     await FileSystem.downloadAsync(uri, tmpPath);
     await FileSystem.moveAsync({ from: tmpPath, to: path });
      this.setState({
