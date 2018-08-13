@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React,{ Component } from 'react';
 import  {
   View,
   Text,
@@ -27,6 +27,7 @@ const {height, width} = Dimensions.get('window');
 
 
 class CoctailList extends Component {
+
   constructor(props){
     super(props);
     this.state = {
@@ -80,10 +81,6 @@ class CoctailList extends Component {
 
 
 _keyExtractor = item => (item.index || item._key)
-
-renderCocktail(item){
-    this.props.navigation.navigate('renderCocktail', {cocktail: item } )
-  }
 
 
   async likedCocktail(item){
@@ -251,6 +248,7 @@ renderCocktail(item){
       navigation={this.props.navigation}
       pageName='userProfile'
       cocktailPage='renderCocktail'
+      user={this.state.user}
     />
   )
 

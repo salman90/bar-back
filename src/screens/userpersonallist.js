@@ -22,7 +22,9 @@ class UserPersonalList extends Component {
   }
 
   state = {
-    cocktailList: null
+    cocktailList: null,
+    user: firebase.auth().currentUser,
+
   }
   componentDidMount() {
     const navParams = this.props.navigation.state.params.user;
@@ -81,6 +83,7 @@ class UserPersonalList extends Component {
     navigation={this.props.navigation}
     pageName='userProfile'
     cocktailPage='renderCocktail'
+    user={this.state.user}
     />
   )
 
@@ -109,7 +112,6 @@ class UserPersonalList extends Component {
            data={this.state.cocktailList}
            renderItem={this._renderItem}
            keyExtractor={this._keyExtractor}
-           removeClippedSubviews={false}
            />
           </View>
         )
