@@ -14,5 +14,9 @@
     "react-native-searchbar": "^1.15.0",
     "react-navigation": "^2.7.0",
     "shorthash": "0.0.2"
+  },
+  "devDependencies": {
+    "babel-preset-react-native": "^4.0.0",
+    "react-native-dotenv": "^0.2.0"
   }
 }

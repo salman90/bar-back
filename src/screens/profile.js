@@ -14,10 +14,7 @@ import firebase from 'firebase';
 import { Avatar, Button, Icon } from 'react-native-elements';
 import { Image, CacheManager } from 'react-native-expo-image-cache';
 import { FileSystem } from 'expo';
-import CacheImage from '../components/chacheImage'
-
-// import { createBottomTabNavigator } from 'react-navigation';
-
+import CacheImage from '../components/chacheImage';
 const {height, width} = Dimensions.get('window');
 
 
@@ -89,9 +86,6 @@ class Profile extends Component {
   }
 
   UploadImageToStorage = async (uri, userUid) => {
-    // const user = firebase.auth().currentUser
-    // const userUid = user.uid
-    // console.log(uri)
 
     const respones = await fetch(uri)
     const blob = await respones.blob()
@@ -185,7 +179,13 @@ class Profile extends Component {
            <View
             style={{ flexDirection: 'column', marginBottom: 10}}
            >
-            <Text>First Name</Text>
+            <View
+             style={{alignItems: 'center', justifyContent: 'center'}}
+            >
+              <Text
+              style={{ fontSize: 20, letterSpacing: 2, marginTop: 10, color: '#fff' }}
+              >First Name</Text>
+           </View>
              <TextInput
              style={styles.inputStyle}
              onChangeText={(text) => this.onFirstNameChange(text)}
@@ -198,7 +198,13 @@ class Profile extends Component {
           <View
            style={{ flexDirection: 'column', marginBottom: 10}}
           >
-            <Text>Last Name</Text>
+            <View
+             style={{alignItems: 'center', justifyContent: 'center'}}
+            >
+              <Text
+               style={{ fontSize: 20, letterSpacing: 2, marginTop: 10, color: '#fff' }}
+              >Last Name</Text>
+            </View>
             <TextInput
               style={styles.inputStyle}
               onChangeText={(text) => this.onLastNameChange(text)}
@@ -211,7 +217,7 @@ class Profile extends Component {
           <View>
           <Button
            title='create a cocktail'
-           buttonStyle={{ marginTop: 8, borderRadius: 10 , backgroundColor: '#3B5998', marginTop: 8, width: 200}}
+           buttonStyle={{ marginTop: 8, borderRadius: 10 , backgroundColor: 'turquoise', marginTop: 8, width: 200}}
            onPress={this.createCocktail.bind(this)}
           />
             <Button
@@ -236,6 +242,7 @@ class Profile extends Component {
 const styles = {
   mainContainer: {
     flex:1,
+    backgroundColor: 'teal'
   },
    scrollViewStyle: {
      flexGrow : 1,
@@ -248,7 +255,8 @@ const styles = {
    inputStyle: {
       width: width * 0.75,
      borderBottomWidth: 2,
-     borderColor: 'gray',
+     borderColor: '#fff',
+     color: '#fff',
    },
    image: {
     height: 200,

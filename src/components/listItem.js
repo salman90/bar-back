@@ -16,13 +16,11 @@ class ListItem extends React.PureComponent {
       this.deleteCockotail = this.deleteCockotail.bind(this)
       this.confirmDelete = this.confirmDelete.bind(this)
       this.renderPlus = this.renderPlus.bind(this)
-      // this.likedCocktail = this.likedCocktail.bind(this)
-      // this.getLikes = this.getLikes.bind(this)
-      // this.salmanIsHere = this.salmanIsHere.bind(this)
     }
 
     renderPlus = (post) => () => {
-      const userUid = firebase.auth().currentUser.uid
+      console.log('in function')
+      const userUid = this.props.user.uid
       const postKey = post._key
       const name = post.name
       const image = post.image
@@ -30,28 +28,44 @@ class ListItem extends React.PureComponent {
       const uid  = post.uid
       const userImage = post.userImage
       const userName  = post.userName
+          firebase.database().ref('user_cocktails').child(userUid).child(postKey).set({
+           name: name,
+           image: image,
+           steps: steps,
+           uid: uid,
+           userImage: userImage,
+           userName: userName,
+           _key: postKey
+         }, (error) => {
+           if(error){
+             alert('could not add to the list try again' + error)
+           }else{
+             // this.renderAnimation()
+             alert('saved to list')
+           }
+         })
     }
 
      async likedCocktail(item) {
-       console.log('whyyyyyy')
-       const userUid = firebase.auth().currentUser.uid
+       // console.log('whyyyyyy')
+       const userUid = this.props.user.uid
        const itemUid = item.uid
       if(userUid === itemUid){
         alert("can't like your own post")
       }else{
-         console.log('in else');
+         // console.log('in else');
         const itemKey = item._key
         firebase.database().ref('likes').child(itemKey).once('value', snap => {
           let data = snap.val() || {}
           let likeUids = Object.keys(data)
           const likeInArray =  _.includes(likeUids, userUid)
-          console.log(likeInArray)
+          // console.log(likeInArray)
             if(likeInArray === false ){
-              console.log('false')
+              // console.log('false')
               const ref = firebase.database().ref()
                   let likesUpdate = {}
                  likesUpdate[`${itemKey}/${userUid}`] = true
-                 console.log(likesUpdate)
+                 // console.log(likesUpdate)
                  ref.child('likes').update(likesUpdate)
                  ref.child('cocktail_list').child(itemKey).update({
                    numberOfLikes: item.numberOfLikes + 1
@@ -67,7 +81,8 @@ class ListItem extends React.PureComponent {
     }
 
     renderRemoveFromList = (item) => () => {
-        const userUid = item.uid
+        // const userUid = item.uid
+        const userUid = this.props.user.uid
         const cocktailUid = item._key
         const cocktailName = item.name
         Alert.alert(
@@ -81,6 +96,11 @@ class ListItem extends React.PureComponent {
     }
 
     deleteListItem = (userUid, cocktailUid) => () => {
+      const Uid = firebase.auth().currentUser.uid
+      console.log(Uid)
+      // firebase.database().ref()
+      // firebase.auth().currentUser
+      console.log(userUid, cocktailUid)
       firebase.database().ref('user_cocktails').child(userUid).child(cocktailUid).remove()
     }
 
@@ -117,7 +137,7 @@ class ListItem extends React.PureComponent {
 
       )
     }else if(navigation.state.routeName === 'cocktailList'){
-      const userUid = firebase.auth().currentUser.uid
+      const userUid = this.props.user.uid
       const itemUid = item.uid
       if(userUid === itemUid){
         return (
@@ -181,7 +201,8 @@ class ListItem extends React.PureComponent {
     }
   }
   render(){
-    const { item, navigation, pageName, cocktailPage } = this.props
+    const { item, navigation, pageName, cocktailPage, user} = this.props
+    // console.log(user)
     // console.log(this.props.item)
     // console.log(navigation.state.routeName)
     return(
