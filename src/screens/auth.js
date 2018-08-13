@@ -130,7 +130,7 @@ class Auth extends Component {
           style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10}}
           >
              <Button
-              buttonStyle={{ width: 250, borderRadius: 10}}
+              buttonStyle={{ width: 250, borderRadius: 10, backgroundColor: '#A9A9A9'}}
               title='Sign Up'
               onPress={this.signInUser}
              />
@@ -146,7 +146,8 @@ const styles = {
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1
+    flex: 1,
+    backgroundColor: 'teal',
   },emailContainer:{
     flexDirection: 'row',
     justifyContent: 'center',

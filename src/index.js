@@ -9,6 +9,15 @@ import CocktailDetail from './screens/cocktailDetail';
 import PorfileUser from './screens/profileUser';
 import UserPersonalList from './screens/userpersonallist'
 import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_DATABASE_URL,
+  FIREBASE_PROJECT_ID,
+ FIREBASE_STORAGE_BUCKET,
+FIREBASE_MESSAGING_SENDER_ID
+} from 'react-native-dotenv';
+
+import {
   createBottomTabNavigator,
   createStackNavigator,
  } from 'react-navigation';
@@ -20,12 +29,12 @@ class App extends React.Component {
 
   componentWillMount(){
     const config = {
-      apiKey: "AIzaSyCqIoVukz6TmYayMf-uFwDmxYPdOOTl6aM",
-      authDomain: "bar-back-c3947.firebaseapp.com",
-      databaseURL: "https://bar-back-c3947.firebaseio.com",
-      projectId: "bar-back-c3947",
-      storageBucket: "bar-back-c3947.appspot.com",
-      messagingSenderId: "133444454362"
+      apiKey: FIREBASE_API_KEY,
+      authDomain: FIREBASE_AUTH_DOMAIN,
+      databaseURL: FIREBASE_DATABASE_URL,
+      projectId: FIREBASE_PROJECT_ID,
+      storageBucket: FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: FIREBASE_MESSAGING_SENDER_ID
     };
     firebase.initializeApp(config);
   }
@@ -39,12 +48,13 @@ class App extends React.Component {
       navigationOptions: ({ navigation }) => ({
         title: `BarBack`,
         headerStyle: {
-         backgroundColor: '#fff'
+         backgroundColor: '#A9A9A9'
        },
        headerTitleStyle: {
          color: '#000',
          fontSize: 20,
-         letterSpacing: 1,
+         letterSpacing: 4,
+         fontWeight: '500',
        },
       })
     })
