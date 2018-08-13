@@ -48,9 +48,15 @@ class CockatailForm extends Component {
 
   componentDidMount() {
     const { data, dataForSteps } = this.state
+<<<<<<< HEAD
     // const name = {
     //   name: 'mahmoud'
     // }
+=======
+    const name = {
+      name: 'mahmoud'
+    }
+>>>>>>> bfd8636abeb216637b16fb96d9208242ba90db68
     data.push(name)
     dataForSteps.push(name)
     const user = firebase.auth().currentUser
