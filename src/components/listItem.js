@@ -19,7 +19,6 @@ class ListItem extends React.PureComponent {
     }
 
     renderPlus = (post) => () => {
-      console.log('in function')
       const userUid = this.props.user.uid
       const postKey = post._key
       const name = post.name
@@ -49,28 +48,30 @@ class ListItem extends React.PureComponent {
      async likedCocktail(item) {
        // console.log('whyyyyyy')
        const userUid = this.props.user.uid
+       console.log(userUid)
        const itemUid = item.uid
+       console.log(itemUid)
       if(userUid === itemUid){
         alert("can't like your own post")
       }else{
-         // console.log('in else');
+         console.log('in else');
         const itemKey = item._key
+        // console.log(item._key)
         firebase.database().ref('likes').child(itemKey).once('value', snap => {
           let data = snap.val() || {}
           let likeUids = Object.keys(data)
           const likeInArray =  _.includes(likeUids, userUid)
-          // console.log(likeInArray)
             if(likeInArray === false ){
-              // console.log('false')
+              console.log('in +1')
               const ref = firebase.database().ref()
                   let likesUpdate = {}
                  likesUpdate[`${itemKey}/${userUid}`] = true
-                 // console.log(likesUpdate)
                  ref.child('likes').update(likesUpdate)
                  ref.child('cocktail_list').child(itemKey).update({
                    numberOfLikes: item.numberOfLikes + 1
                  })
            }else {
+             console.log('in -1')
              firebase.database().ref('likes').child(itemKey).child(userUid).remove()
                firebase.database().ref('cocktail_list').child(itemKey).update({
                  numberOfLikes: item.numberOfLikes - 1
@@ -81,7 +82,6 @@ class ListItem extends React.PureComponent {
     }
 
     renderRemoveFromList = (item) => () => {
-        // const userUid = item.uid
         const userUid = this.props.user.uid
         const cocktailUid = item._key
         const cocktailName = item.name
@@ -202,9 +202,6 @@ class ListItem extends React.PureComponent {
   }
   render(){
     const { item, navigation, pageName, cocktailPage, user} = this.props
-    // console.log(user)
-    // console.log(this.props.item)
-    // console.log(navigation.state.routeName)
     return(
       <Card
        containerStyle={{ borderRadius: 10, marginBottom: 8 }}
@@ -228,7 +225,7 @@ class ListItem extends React.PureComponent {
        >
          <Text
           style={{ fontSize: 15, fontWeight: '500', letterSpacing: 2 }}
-         >{item.name.toUpperCase()}</Text>
+         >{item.name}</Text>
        </View>
         <View
          style={{ marginTop: 10}}

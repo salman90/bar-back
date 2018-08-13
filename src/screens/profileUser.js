@@ -9,11 +9,11 @@ import  {
   Alert,
   Dimensions,
   StatusBar,
-  Animated,
 } from 'react-native';
 import * as firebase from 'firebase';
 import SearchBar from 'react-native-searchbar';
 import fontAwesome from 'react-native-vector-icons';
+import CacheImage from '../components/chacheImage';
 import { createStackNavigator } from 'react-navigation';
 import { Card, Button, Icon, Avatar } from 'react-native-elements';
 import _ from 'lodash';
@@ -33,6 +33,7 @@ class ProfileUser extends Component {
       iconColor: '#000',
       liked: null,
       numberOfLikes: 0,
+      userInfo: firebase.auth().currentUser,
     };
     this._handleResults = this._handleResults.bind(this);
   }
@@ -73,11 +74,7 @@ class ProfileUser extends Component {
       this.setState({ cocktailList: list })
     });
   }
-
-
-
 _keyExtractor = item => (item.index || item.image)
-
 
   _renderItem = ({item}) => (
     <ListItem
@@ -85,7 +82,7 @@ _keyExtractor = item => (item.index || item.image)
       navigation={this.props.navigation}
       pageName='userProfile'
       cocktailPage='renderCocktail'
-      user={this.state.user}
+      user={this.state.userInfo}
     />
   )
 
@@ -104,12 +101,9 @@ _keyExtractor = item => (item.index || item.image)
         style={{fontSize: 40}}>
           {this.state.user.firstName} {this.state.user.lastName}
         </Text>
-        <Avatar
-         width={200}
-         rounded
-         size="xlarge"
-         onPress={this.uploadImage}
-         source={{uri: this.state.user.profileImage}}
+        <CacheImage
+         uri={this.state.user.profileImage}
+         style={{ width: 300, height: 200, borderRadius: 10 }}
         />
       </View>
       <View style={{flexDirection: 'column', alignItems: 'center'}}>
