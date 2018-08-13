@@ -16,7 +16,7 @@ export default class CacheImage extends React.Component {
 
   async componentDidMount() {
     const { uri } = this.props;
-    console.log(uri)
+    // console.log(uri)
     // console.log(typeof uri === 'undefined')
     const filename = uri.substring(uri.lastIndexOf("/"), uri.indexOf("?") === -1 ? uri.length : uri.indexOf("?"));
     // console.log(filename)
