@@ -22,3 +22,17 @@ height='300'
 src='src/images/userLis.png'
 height='300'
 />
+
+# Dependencies & Libraries
+<ul>
+<li>React Native</li>
+<li>Expo</li>
+<li>Nodejs</li>
+<li>Firebase</li>
+<li>React Native Elements</li>
+<li>React Navigation</li>
+<li>React Native Image cache</li>
+</ul>
+
+Please check the project on Expo and follow me
+https://expo.io/@salman90/bar-back-2
