@@ -17,6 +17,7 @@ import { BlurView } from 'expo';
 import SearchBar from 'react-native-searchbar';
 import fontAwesome from 'react-native-vector-icons';
 import { createStackNavigator } from 'react-navigation';
+
 import { Card, Button, Icon } from 'react-native-elements';
 import CacheImage from '../components/chacheImage';
 import ListItem from '../components/listItem';
@@ -44,6 +45,7 @@ class CoctailList extends Component {
       refreshing: false,
       loading: false,
     };
+   this.renderPlus = this.renderPlus.bind(this)
   }
 
   async componentDidMount(){
@@ -127,7 +129,7 @@ _keyExtractor = item => (item.index || item._key)
     })
   }
 
-   renderPlus(post){
+   renderPlus = (post) => () => {
     const { user } = this.state
     const userUid =  user.uid
     const postKey = post._key
@@ -204,7 +206,7 @@ _keyExtractor = item => (item.index || item._key)
             name='plus-square'
             type='font-awesome'
             size={25}
-            onPress={this.renderPlus.bind(this, item)}
+            onPress={this.renderPlus(item)}
            />
          </Animated.View>
 

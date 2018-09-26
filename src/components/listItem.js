@@ -27,14 +27,16 @@ class ListItem extends React.PureComponent {
       const uid  = post.uid
       const userImage = post.userImage
       const userName  = post.userName
+      const ingredients = post.ingredients
           firebase.database().ref('user_cocktails').child(userUid).child(postKey).set({
            name: name,
            image: image,
            steps: steps,
            uid: uid,
+           ingredients: ingredients,
            userImage: userImage,
            userName: userName,
-           _key: postKey
+           _key: postKey,
          }, (error) => {
            if(error){
              alert('could not add to the list try again' + error)
@@ -71,7 +73,7 @@ class ListItem extends React.PureComponent {
                    numberOfLikes: item.numberOfLikes + 1
                  })
            }else {
-             console.log('in -1')
+             // console.log('in -1')
              firebase.database().ref('likes').child(itemKey).child(userUid).remove()
                firebase.database().ref('cocktail_list').child(itemKey).update({
                  numberOfLikes: item.numberOfLikes - 1
@@ -97,10 +99,10 @@ class ListItem extends React.PureComponent {
 
     deleteListItem = (userUid, cocktailUid) => () => {
       const Uid = firebase.auth().currentUser.uid
-      console.log(Uid)
+      // console.log(Uid)
       // firebase.database().ref()
       // firebase.auth().currentUser
-      console.log(userUid, cocktailUid)
+      // console.log(userUid, cocktailUid)
       firebase.database().ref('user_cocktails').child(userUid).child(cocktailUid).remove()
     }
 

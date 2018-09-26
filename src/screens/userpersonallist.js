@@ -27,6 +27,7 @@ class UserPersonalList extends Component {
 
   }
   componentDidMount() {
+    // console.log('at page')
     const navParams = this.props.navigation.state.params.user;
     const userUid = navParams.uid
     // console.log(userUid)
@@ -51,9 +52,10 @@ class UserPersonalList extends Component {
 
   _keyExtractor = item => (item.index || item._key)
 
-  renderCocktail(item){
-    this.props.navigation.navigate('renderCocktail', {cocktail: item } )
-  }
+  // renderCocktail(item){
+  //   console.log(item)
+  //   this.props.navigation.navigate('renderCocktail', {cocktail: item } )
+  // }
 
   renderRemoveFromList(post){
 
@@ -88,6 +90,7 @@ class UserPersonalList extends Component {
   )
 
   render(){
+    // console.log(this.state.cocktailList)
        if(this.state.cocktailList === null){
          return(
            <View
@@ -99,22 +102,32 @@ class UserPersonalList extends Component {
            </View>
          )
        }else {
-        return (
-          <View
-           style={{
-             flex: 1,
-             alignItems: 'center',
-             justifyContent: 'center',
-             backgroundColor: 'teal'
-           }}
-          >
-           <FlatList
-           data={this.state.cocktailList}
-           renderItem={this._renderItem}
-           keyExtractor={this._keyExtractor}
-           />
-          </View>
-        )
+         if(this.state.cocktailList.length === 0){
+           return (
+             <View
+              style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'teal'}}
+             >
+              <Text>please create or add a cocktail to your List</Text>
+             </View>
+           )
+         }else{
+           return (
+             <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'teal'
+              }}
+             >
+              <FlatList
+              data={this.state.cocktailList}
+              renderItem={this._renderItem}
+              keyExtractor={this._keyExtractor}
+              />
+             </View>
+           )
+         }
        }
   }
 }

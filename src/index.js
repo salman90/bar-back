@@ -40,6 +40,15 @@ class App extends React.Component {
   }
 
   render() {
+    const userProfileListStack = createStackNavigator({
+      userPersonalList: {screen: UserPersonalList},
+      renderCocktail: { screen: CocktailDetail},
+    }, {
+      navigationOptions: ({ navigation }) => ({
+        title: `BarBack`,
+        headerVisible: false,
+      })
+    })
     const profileStack = createStackNavigator({
       profile: {screen: Profile },
       userPersonalList: {screen: UserPersonalList},

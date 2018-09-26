@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import {View, Text, TextInput, Dimensions, KeyboardAvoidingView, ActivityIndicator  } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Dimensions,
+  KeyboardAvoidingView,
+  ActivityIndicator, Image, TouchableOpacity    } from 'react-native';
 import { Input, Card, Icon, Button } from 'react-native-elements';
 import * as firebase from "firebase";
 
@@ -7,12 +13,13 @@ const {height, width} = Dimensions.get('window');
 
 class Auth extends Component {
 
-  componentWillMount(){
+  componentDidMount(){
     firebase.auth().onAuthStateChanged(userAuth => {
       if(userAuth){
-        this.props.navigation.navigate('profile')
+        // this.props.navigation.navigate('profile')
       }
     })
+    // console.log('component did mount')
   }
  state = {
    email: '',
@@ -91,6 +98,17 @@ class Auth extends Component {
         <View
          style={styles.container}
         >
+        <TouchableOpacity
+         onPress={() => console.log('sara ya homara')}
+        >
+          <View>
+            <Image
+              style={{ width: 100, height: 100, borderRadius: 10}}
+              source={require('../images/logo.png')}
+            />
+          </View>
+        </TouchableOpacity>
+
           <View
            style={styles.emailContainer}
           >
@@ -147,7 +165,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    backgroundColor: 'teal',
+    backgroundColor: 'rgb(29, 235, 178)',
   },emailContainer:{
     flexDirection: 'row',
     justifyContent: 'center',

@@ -10,6 +10,7 @@ import  {
   Modal,
 TouchableWithoutFeedback} from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
+// import { Image, CacheManager } from "react-native-expo-image-cache";
 import firebase from 'firebase';
 import { Avatar, Button, Icon } from 'react-native-elements';
 import { Image, CacheManager } from 'react-native-expo-image-cache';
@@ -137,6 +138,9 @@ class Profile extends Component {
   render(){
     // console.log(this.props.)
     const {user, userInfo} = this.state
+    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+    console.log(user)
+    // const {user, userInfo} = this.state
     // console.log(this.state.user)
     if(!this.state.user) {
       return(
@@ -167,12 +171,9 @@ class Profile extends Component {
            <View
             style={{ flexDirection: 'column', marginBottom: 10, flex:1 }}
            >
-           <Avatar
-              width={200}
-              rounded
-              size="xlarge"
-              onPress={this.uploadImage}
-              source={{uri: this.state.user.profileImage}}
+           <Image
+              style={{ width: 200, height: 200, borderRadius: 200/2 }}
+              {...{preview, uri: user.profileImage}}
              />
            </View>
         </TouchableWithoutFeedback>
@@ -193,6 +194,8 @@ class Profile extends Component {
              autoCapitalize='none'
              autoCorrect={false}
              underlineColorAndroid='rgba(0,0,0,0)'
+             placeholder='First Name'
+             placeholderTextColor='#fff'
              />
           </View>
           <View
@@ -212,6 +215,8 @@ class Profile extends Component {
               autoCapitalize='none'
               autoCorrect={false}
               underlineColorAndroid='rgba(0,0,0,0)'
+              placeholder='Last Name'
+              placeholderTextColor='#fff'
             />
           </View>
           <View>
